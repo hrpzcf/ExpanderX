@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{30ACBBBE-1DB2-4221-BAA3-11CAC34AE4FA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ExpanderX</RootNamespace>
+    <AssemblyName>ExpanderX</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\ExpanderFiles\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\ExpanderFiles\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AboutUI.xaml.cs">
+      <DependentUpon>AboutUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExpanderXMain.xaml.cs">
+      <DependentUpon>ExpanderXMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModuleUI.xaml.cs">
+      <DependentUpon>TaskModuleUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LineInputBox.xaml.cs">
+      <DependentUpon>LineInputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Information.cs" />
+    <Compile Include="LicenseUI.xaml.cs">
+      <DependentUpon>LicenseUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ListBoxItemCheck.xaml.cs">
+      <DependentUpon>ListBoxItemCheck.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ListBoxItemImage.xaml.cs">
+      <DependentUpon>ListBoxItemImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\RequestHandler.cs" />
+    <Compile Include="Services\LoopService.cs" />
+    <Compile Include="Services\Serialization.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SettingsUI.xaml.cs">
+      <DependentUpon>SettingsUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModules\UserCtrlExpanderXCtrl.xaml.cs">
+      <DependentUpon>UserCtrlExpanderXCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModules\UserCtrlTopTipsWindow.xaml.cs">
+      <DependentUpon>UserCtrlTopTipsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModules\UserCtrlKeywordMatcher.xaml.cs">
+      <DependentUpon>UserCtrlKeywordMatcher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModules\UserCtrlMessageSender.xaml.cs">
+      <DependentUpon>UserCtrlMessageSender.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskModules\UserCtrlTopTipsExecutor.xaml.cs">
+      <DependentUpon>UserCtrlTopTipsExecutor.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AboutUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExpanderXMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TaskModuleUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="LineInputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LicenseUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListBoxItemCheck.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListBoxItemImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlExpanderXCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlTopTipsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlKeywordMatcher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlMessageSender.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlTopTipsExecutor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComRules\CommonRule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Properties\app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.png" />
+    <Resource Include="Images\com.png" />
+    <Resource Include="Images\del.png" />
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\icon.ico" />
+    <Resource Include="Images\icon.png" />
+    <Resource Include="Images\logo.ico" />
+    <Resource Include="Images\running.png" />
+    <Resource Include="Images\stopped.png" />
+    <Resource Include="Images\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\executor.png" />
+    <Resource Include="Images\mixed.png" />
+    <Resource Include="Images\matcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExpanderXSDK\ExpanderXSDK\ExpanderXSDK.csproj">
+      <Project>{384548ee-efc4-404f-9800-ca838e38cce7}</Project>
+      <Name>ExpanderXSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

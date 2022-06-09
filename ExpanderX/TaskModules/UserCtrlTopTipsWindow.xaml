@@ -1,0 +1,63 @@
+﻿<Window
+    x:Class="ExpanderX.TopTipsWin"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ExpanderX"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="消息提醒"
+    Width="500"
+    Height="300"
+    Icon="/Images/icon.ico"
+    Topmost="True"
+    mc:Ignorable="d">
+    <Grid Margin="5,5,5,5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="uiTextBlock_Sender"
+            Grid.Row="1"
+            Margin="0,0,5,5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Text="发送者"
+            TextWrapping="Wrap" />
+        <TextBox
+            x:Name="uiTextBox_Sender"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,0,0,5"
+            Padding="2,2,2,2" />
+        <TextBlock
+            x:Name="uiTextBlock_Message"
+            Grid.Row="2"
+            Margin="0,0,5,0"
+            HorizontalAlignment="Right"
+            Text="消息内容"
+            TextWrapping="Wrap" />
+        <TextBox
+            x:Name="uiTextBox_Message"
+            Grid.Row="2"
+            Grid.Column="1"
+            Padding="2,2,2,2"
+            TextWrapping="Wrap" />
+        <TextBlock
+            x:Name="uiTextBlock_NameChatting"
+            Margin="0,0,5,5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Text="聊天对象" />
+        <TextBox
+            x:Name="uiTextBox_NameChatting"
+            Grid.Column="1"
+            Margin="0,0,0,5"
+            Padding="2,2,2,2" />
+    </Grid>
+</Window>

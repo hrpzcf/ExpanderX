@@ -1,0 +1,54 @@
+﻿<UserControl
+    x:Class="ExpanderX.UserCtrlExpanderXCtrl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ExpanderX"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="100"
+    d:DesignWidth="500"
+    Background="White"
+    mc:Ignorable="d">
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Padding="0,3,0,3"
+            VerticalAlignment="Top"
+            Text="请求" />
+        <ComboBox
+            x:Name="uiComboBox_StartStop"
+            Grid.Column="1"
+            Margin="5,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            SelectedIndex="0">
+            <ComboBoxItem Content="停止" />
+            <ComboBoxItem Content="启动" />
+            <ComboBoxItem Content="退出" />
+        </ComboBox>
+        <TextBlock
+            Grid.Column="2"
+            Margin="5,0,0,0"
+            Padding="0,3,0,3"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="ExpanderX 服务。" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Margin="0,10,0,0"
+            VerticalAlignment="Top"
+            Background="#FFEBEBEB"
+            FontFamily="NSimSun"
+            Text="详情：在 ExpanderX 服务正在运行的时候，此执行器可以请求停止 ExpanderX 服务；如果服务正在运行，而且选项为&quot;启动&quot;，则请求停止服务并重新启动。通常，此执行器应作为规则内的最后一个执行器，因为此执行器执行后 ExpanderX 服务中断，导致后面的执行器很可能不再被执行。"
+            TextWrapping="Wrap" />
+    </Grid>
+</UserControl>

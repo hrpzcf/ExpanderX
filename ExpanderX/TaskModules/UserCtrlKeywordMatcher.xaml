@@ -1,0 +1,182 @@
+﻿<UserControl
+    x:Class="ExpanderX.UserCtrlKeywordDetector"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ExpanderX"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="800"
+    d:DesignWidth="800"
+    Background="White"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <GroupBox Header="匹配：探测消息关键词">
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="匹配聊天框名称" />
+                        <TextBox
+                            x:Name="uiTextBox_NameChatting"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,0,0,5"
+                            Padding="0,2,0,2"
+                            TextWrapping="Wrap"
+                            ToolTip="钉钉消息框左上角显示的名称是此名称时匹配。&#13;注意：此处留空不能使任务模块去探测所有钉钉聊天框的消息，而是：不论打开的钉钉聊天框是哪个都可以匹配。" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Text="匹配此昵称的发送者"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            x:Name="uiTextBox_SendersInclude"
+                            Grid.Row="3"
+                            MinHeight="120"
+                            Margin="0,0,3,5"
+                            Padding="0,2,0,2"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            ToolTip="消息发送者是这些发送者之一时匹配。&#13;此处留空表示所有发送者都匹配。"
+                            VerticalScrollBarVisibility="Auto" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="3,0,0,0"
+                            Text="不匹配此昵称的发送者" />
+                        <TextBox
+                            x:Name="uiTextBox_SendersExclude"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            MinHeight="120"
+                            Margin="3,0,0,5"
+                            Padding="0,2,0,2"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            ToolTip="消息发送者是这些发送者之一时不匹配。&#13;此处留空表示所有发送者都匹配。&#13;注意，不匹配的优先级比匹配的优先级高。"
+                            VerticalScrollBarVisibility="Auto" />
+                        <TextBlock
+                            Grid.Row="4"
+                            Text="匹配包含此关键词的消息"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            x:Name="uiTextBox_KeywordsInclude"
+                            Grid.Row="5"
+                            MinHeight="120"
+                            Margin="0,0,3,5"
+                            Padding="0,2,0,2"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            ToolTip="钉钉消息内容包含这些关键词之一时匹配。&#13;此处留空表示所有消息内容都匹配。"
+                            VerticalScrollBarVisibility="Auto" />
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Margin="3,0,0,0"
+                            Text="不匹配包含此关键词的消息"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            x:Name="uiTextBox_KeywordsExclude"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            MinHeight="120"
+                            Margin="3,0,0,5"
+                            Padding="0,2,0,2"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            ToolTip="钉钉消息内容包含这些关键词之一时不匹配。&#13;此处留空表示所有消息内容都匹配。&#13;注意，不匹配的优先级比匹配的优先级高。"
+                            VerticalScrollBarVisibility="Auto" />
+                        <TextBlock
+                            Grid.Row="6"
+                            Text="不匹配此内容的消息" />
+                        <TextBox
+                            x:Name="uiTextBox_ExcludeContent"
+                            Grid.Row="7"
+                            Grid.ColumnSpan="2"
+                            MinHeight="120"
+                            Margin="0,0,0,5"
+                            Padding="0,2,0,2"
+                            AcceptsReturn="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            ToolTip="钉钉消息内容和此内容完全一样时不匹配。&#13;此处留空表示所有消息内容都匹配。&#13;注意，此处设置比&quot;关键词(匹配、不匹配)&quot;优先级高。&#13;当规则中有自动回复消息的执行器时，把自动回复的内容复制一份填到此处。" />
+                        <TextBlock
+                            Grid.Row="8"
+                            Text="使用帮助" />
+                        <TextBlock
+                            Grid.Row="9"
+                            Grid.ColumnSpan="2"
+                            Padding="3,3,3,3"
+                            Background="#FFEBEBEB"
+                            FontFamily="NSimSun"
+                            TextWrapping="Wrap">
+                            <Run Text="探测钉钉当前状态是否同时符合以上三个约束条件：聊天框名称、消息发送者(匹配/不匹配)、消息关键词(匹配/不匹配)。 匹配工作从启动服务后接收到的第一条消息开始。发送人和内容与上一条消息完全一样则算是不符合匹配条件。" />
+                            <LineBreak />
+                            <Run Text="三个条件都可留空，&quot;匹配&quot;留空表示&quot;匹配所有&quot;，&quot;不匹配&quot;留空表示&quot;无不匹配&quot;。其中&quot;发送者(匹配/不匹配)&quot;和&quot;关键词(匹配/不匹配)&quot;可填写多个，每行一个。&quot;不匹配&quot;比&quot;匹配&quot;优先级高，即：一条消息同时有&quot;匹配&quot;和&quot;不匹配&quot;内的关键词，则优先不匹配。" />
+                            <LineBreak />
+                            <Run Text="&quot;不匹配此内容的消息&quot;一般用于禁止匹配本程序自动回复的内容，这对于自动回复的内容也包含关键字时非常有用，可以避免出现连续自动回复多次的情况。" />
+                        </TextBlock>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </ScrollViewer>
+        <GroupBox
+            Grid.Column="1"
+            Header="执行：前台弹窗展示消息">
+            <Grid Margin="0,5,0,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Text="显示内容"
+                    TextWrapping="Wrap" />
+                <TextBox
+                    x:Name="uiTextBox_TopTipsText"
+                    Grid.Row="1"
+                    Margin="0,0,0,5"
+                    Padding="0,2,0,2"
+                    AcceptsReturn="True"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto" />
+                <ComboBox
+                    x:Name="uiComboBox_CustomOrLastMsgs"
+                    Grid.Row="2"
+                    Margin="0,0,0,5"
+                    SelectedIndex="0">
+                    <ComboBoxItem Content="显示以上自定义内容" />
+                    <ComboBoxItem Content="显示左侧匹配到的消息" />
+                </ComboBox>
+                <TextBlock
+                    Grid.Row="3"
+                    Text="使用帮助" />
+                <TextBlock
+                    Grid.Row="4"
+                    Background="#FFEBEBEB"
+                    FontFamily="NSimSun"
+                    Text="如果同规则内的全部匹配器都符合匹配条件，则创建一个在所有窗口之上的前台弹窗，用于显示自定义内容或者匹配器检测到的包含关键词的消息的发送者和消息内容。"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
