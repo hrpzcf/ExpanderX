@@ -75,7 +75,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\ExpanderXSetup.msi"
+        "OutputFilename" = "8:Debug\\ExpanderX_Windows10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -107,7 +107,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\ExpanderXSetup.msi"
+        "OutputFilename" = "8:Release\\ExpanderX_Windows10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -166,7 +166,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExpanderXSDK, Version=0.1.0.609, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ExpanderXSDK, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_15004CF4E86CB55992D0D50902BBE640"
@@ -217,7 +217,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExpanderX, Version=1.0.0.609, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ExpanderX, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_571B09AEEFAC4F0F80B399844A736AE0"
@@ -372,7 +372,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExpanderX"
         "ProductCode" = "8:{B3D8E495-FFB9-41FF-B07C-8914170747FB}"
-        "PackageCode" = "8:{39199036-076A-4346-9043-18A9C29C421A}"
+        "PackageCode" = "8:{D9995B8B-1C72-40F4-836E-62C5BF3D89E6}"
         "UpgradeCode" = "8:{F870DEFE-34D7-4BB8-8ADE-D744C72D58A9}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
