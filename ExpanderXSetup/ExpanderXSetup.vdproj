@@ -52,12 +52,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_93A02F1E165E569D7F64218E97F51823"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_571B09AEEFAC4F0F80B399844A736AE0"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -65,6 +59,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_15004CF4E86CB55992D0D50902BBE640"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_93A02F1E165E569D7F64218E97F51823"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -166,7 +166,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExpanderXSDK, Version=1.0.0.603, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ExpanderXSDK, Version=0.1.0.609, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_15004CF4E86CB55992D0D50902BBE640"
@@ -217,7 +217,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExpanderX, Version=1.0.0.603, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ExpanderX, Version=1.0.0.609, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_571B09AEEFAC4F0F80B399844A736AE0"
@@ -372,7 +372,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExpanderX"
         "ProductCode" = "8:{B3D8E495-FFB9-41FF-B07C-8914170747FB}"
-        "PackageCode" = "8:{44610F45-6657-4CCD-A38F-20A2220BCA75}"
+        "PackageCode" = "8:{39199036-076A-4346-9043-18A9C29C421A}"
         "UpgradeCode" = "8:{F870DEFE-34D7-4BB8-8ADE-D744C72D58A9}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -380,7 +380,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:hrpzcf"
+        "Manufacturer" = "8:ExpanderX"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:ExpanderX"
