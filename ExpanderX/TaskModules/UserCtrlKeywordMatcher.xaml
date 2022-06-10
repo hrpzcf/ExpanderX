@@ -34,7 +34,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <TextBlock Text="匹配聊天框名称" />
+                        <TextBlock Text="匹配消息框标题" />
                         <TextBox
                             x:Name="uiTextBox_NameChatting"
                             Grid.Row="1"
@@ -42,7 +42,7 @@
                             Margin="0,0,0,5"
                             Padding="0,2,0,2"
                             TextWrapping="Wrap"
-                            ToolTip="钉钉消息框左上角显示的名称是此名称时匹配。&#13;注意：此处留空不能使任务模块去探测所有钉钉聊天框的消息，而是：不论打开的钉钉聊天框是哪个都可以匹配。" />
+                            ToolTip="钉钉消息框左上角显示的名称是此名称时匹配。&#13;注意：此处留空不能使任务模块去探测所有钉钉消息框的消息，而是：不论打开的钉钉消息框是哪个都可以匹配。" />
                         <TextBlock
                             Grid.Row="2"
                             Text="匹配此昵称的发送者"
@@ -127,7 +127,7 @@
                             Background="#FFEBEBEB"
                             FontFamily="NSimSun"
                             TextWrapping="Wrap">
-                            <Run Text="探测钉钉当前状态是否同时符合以上三个约束条件：聊天框名称、消息发送者(匹配/不匹配)、消息关键词(匹配/不匹配)。 匹配工作从启动服务后接收到的第一条消息开始。发送人和内容与上一条消息完全一样则算是不符合匹配条件。" />
+                            <Run Text="探测钉钉当前状态是否同时符合以上三个约束条件：消息框标题、消息发送者(匹配/不匹配)、消息关键词(匹配/不匹配)。 匹配工作从启动服务后接收到的第一条消息开始。发送人和内容与上一条消息完全一样则算是不符合匹配条件。" />
                             <LineBreak />
                             <Run Text="三个条件都可留空，&quot;匹配&quot;留空表示&quot;匹配所有&quot;，&quot;不匹配&quot;留空表示&quot;无不匹配&quot;。其中&quot;发送者(匹配/不匹配)&quot;和&quot;关键词(匹配/不匹配)&quot;可填写多个，每行一个。&quot;不匹配&quot;比&quot;匹配&quot;优先级高，即：一条消息同时有&quot;匹配&quot;和&quot;不匹配&quot;内的关键词，则优先不匹配。" />
                             <LineBreak />
