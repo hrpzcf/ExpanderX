@@ -37,7 +37,7 @@ namespace ExpanderX
                     this.uiRadioButton_ExitApp.IsChecked = true;
                 this.uiCheckBox_CheckIfClientReady.IsChecked = s.CheckIfClientReady;
                 this.uiComBox_UnsavedTaskModules.SelectedIndex = s.ExitWithUnsavedTaskModule;
-                this.uiComBox_UnsavedTaskModules.SelectionChanged += ComboBoxSelectionChanged;
+                this.uiComBox_UnsavedTaskModules.SelectionChanged += this.ComboBoxSelectionChanged;
             }
             catch
             {

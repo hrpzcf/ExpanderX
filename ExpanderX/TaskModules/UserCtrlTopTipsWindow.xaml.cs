@@ -78,7 +78,7 @@ namespace ExpanderX
             }
         }
 
-        public void HideSender()
+        public void OnlyContent()
         {
             this.uiTextBlock_Sender.Visibility = Visibility.Collapsed;
             this.uiTextBox_Sender.Visibility = Visibility.Collapsed;

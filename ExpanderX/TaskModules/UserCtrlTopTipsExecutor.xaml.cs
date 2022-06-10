@@ -72,7 +72,7 @@ namespace ExpanderX
         {
             TopTipsWin tips = new TopTipsWin()
             { Message = TopTipsText };
-            tips.HideSender();
+            tips.OnlyContent();
             tips.Show();
         }
 
