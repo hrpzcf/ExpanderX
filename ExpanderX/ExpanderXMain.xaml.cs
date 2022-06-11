@@ -44,6 +44,7 @@ namespace ExpanderX
             new UserCtrlKeywordDetector(),
             new UserCtrlExpanderXCtrl(),
             new UserCtrlMessageSender(),
+            new UserCtrlCmdExecutor(),
             new UserCtrlTopTipsExecutor(),
         };
         private readonly IFormatter formatter = new BinaryFormatter();
@@ -254,24 +255,24 @@ namespace ExpanderX
             {
                 switch (s.ExitWithUnsavedTaskModule)
                 {
-                case 0:
-                    int res = USER.MessageBox(
-                        this.windowHelper.Handle,
-                        "还有未合并成规则的任务模块，确定退出吗？",
-                        "提示",
-                        MB.MB_OKCANCEL | MB.MB_TOPMOST
-                    );
-                    if (res != 1)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-                    break;
-                case 1:
-                    this.CombineTaskModulesAsCommonRule();
-                    break;
-                case 2:
-                    break;
+                    case 0:
+                        int res = USER.MessageBox(
+                            this.windowHelper.Handle,
+                            "还有未合并成规则的任务模块，确定退出吗？",
+                            "提示",
+                            MB.MB_OKCANCEL | MB.MB_TOPMOST
+                        );
+                        if (res != 1)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                        break;
+                    case 1:
+                        this.CombineTaskModulesAsCommonRule();
+                        break;
+                    case 2:
+                        break;
                 }
             }
             this.ApplicationExitEvent();
@@ -958,18 +959,18 @@ namespace ExpanderX
             }
             switch (this.confedTaskModules[index].TaskType)
             {
-            case 2:
-                this.uiCheckBox_SigEnable.IsEnabled = true;
-                this.uiCheckBox_ExcEnable.IsEnabled = true;
-                break;
-            case 0:
-                this.uiCheckBox_SigEnable.IsEnabled = true;
-                this.uiCheckBox_ExcEnable.IsEnabled = false;
-                break;
-            case 1:
-                this.uiCheckBox_SigEnable.IsEnabled = false;
-                this.uiCheckBox_ExcEnable.IsEnabled = true;
-                break;
+                case 2:
+                    this.uiCheckBox_SigEnable.IsEnabled = true;
+                    this.uiCheckBox_ExcEnable.IsEnabled = true;
+                    break;
+                case 0:
+                    this.uiCheckBox_SigEnable.IsEnabled = true;
+                    this.uiCheckBox_ExcEnable.IsEnabled = false;
+                    break;
+                case 1:
+                    this.uiCheckBox_SigEnable.IsEnabled = false;
+                    this.uiCheckBox_ExcEnable.IsEnabled = true;
+                    break;
             }
             if (this.confedTaskModules[index].IsMatchEnable)
             {
