@@ -46,7 +46,8 @@ namespace ExpanderX
                 FileInfo sp = new FileInfo(savePath);
                 if (sp.Exists)
                     return false;
-                using (Stream fs = sp.Create()) { fmt.Serialize(fs, instance); }
+                using (Stream fs = sp.Create())
+                { fmt.Serialize(fs, instance); }
                 return true;
             }
             catch (Exception)

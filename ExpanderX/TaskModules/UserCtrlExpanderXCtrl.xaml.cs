@@ -37,15 +37,15 @@ namespace ExpanderX
         {
             switch (this.controlType)
             {
-            case 0:
-                PubEX.Stop();
-                break;
-            case 1:
-                PubEX.Start();
-                break;
-            case 2:
-                PubEX.Exit();
-                break;
+                case 0:
+                    PubEX.Stop();
+                    break;
+                case 1:
+                    PubEX.Start();
+                    break;
+                case 2:
+                    PubEX.Exit();
+                    break;
             }
             return true;
         }
@@ -58,7 +58,8 @@ namespace ExpanderX
                 return "发起\"启动ExpanderX服务\"的请求。";
             else if (this.controlType == 2)
                 return "发起\"退出ExpanderX程序\"的请求。";
-            else return base.ExecutorDetails();
+            else
+                return base.ExecutorDetails();
         }
 
         public override bool IsMatch() { return false; }

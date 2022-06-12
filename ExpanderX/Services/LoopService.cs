@@ -54,7 +54,8 @@ namespace ExpanderX
         /// <returns></returns>
         public RuleResult[] Stop()
         {
-            lock (this.locker) { this.keepState = false; }
+            lock (this.locker)
+            { this.keepState = false; }
             if (this.threadSrv == null || !this.threadSrv.IsAlive)
             {
                 this.threadSrv = null;
@@ -125,12 +126,14 @@ namespace ExpanderX
             long timeIntervalLimit = 100;
             long lastMilliseconds = stopwatch.ElapsedMilliseconds;
             Random random = new Random();
-            lock (this.locker) { this.state = STATE.Running; }
+            lock (this.locker)
+            { this.state = STATE.Running; }
             while (this.keepState)
             {
                 long milliseconds = stopwatch.ElapsedMilliseconds;
                 int[] interval = PubSets.CurSettings.Interval();
-                try { timeIntervalLimit = random.Next(interval[0], interval[1]); }
+                try
+                { timeIntervalLimit = random.Next(interval[0], interval[1]); }
                 catch { }
                 if (milliseconds - lastMilliseconds < timeIntervalLimit)
                     try
@@ -140,10 +143,12 @@ namespace ExpanderX
                     }
                     catch (ThreadInterruptedException) { goto StopWatchAndEndLoop; }
                 lastMilliseconds = stopwatch.ElapsedMilliseconds;
-                foreach (AbsRuleModel rl in this.enableRules) { rl.ExecuteTask(); }
+                foreach (AbsRuleModel rl in this.enableRules)
+                { rl.ExecuteTask(); }
             }
         StopWatchAndEndLoop:
-            lock (this.locker) { this.state = STATE.Stopped; }
+            lock (this.locker)
+            { this.state = STATE.Stopped; }
             stopwatch.Stop();
         }
     }

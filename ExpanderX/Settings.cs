@@ -45,7 +45,8 @@ namespace ExpanderX
             set
             {
                 bool res = double.TryParse(value, out double il);
-                if (res) this.intervalLower = il < 0.1 ? 0.1 : il;
+                if (res)
+                    this.intervalLower = il < 0.1 ? 0.1 : il;
             }
         }
 
@@ -55,7 +56,8 @@ namespace ExpanderX
             set
             {
                 bool res = double.TryParse(value, out double iu);
-                if (res) this.intervalUpper = iu < 0.1 ? 0.1 : iu;
+                if (res)
+                    this.intervalUpper = iu < 0.1 ? 0.1 : iu;
             }
         }
     }
@@ -89,7 +91,8 @@ namespace ExpanderX
                 {
                     confDir.Create();
                 }
-                using (FileStream fs = File.Create(conf)) { fmt.Serialize(fs, s); }
+                using (FileStream fs = File.Create(conf))
+                { fmt.Serialize(fs, s); }
                 return true;
             }
             catch

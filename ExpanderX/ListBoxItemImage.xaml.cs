@@ -20,18 +20,18 @@ namespace ExpanderX
             this.uiTextBox_TaskModuleName.Text = w.Name;
             switch (w.TaskType)
             {
-            case 0:
-                this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMatcher"];
-                break;
-            case 1:
-                this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgExecutor"];
-                break;
-            case 2:
-                this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMixed"];
-                break;
-            default:
-                this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMatcher"];
-                break;
+                case 0:
+                    this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMatcher"];
+                    break;
+                case 1:
+                    this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgExecutor"];
+                    break;
+                case 2:
+                    this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMixed"];
+                    break;
+                default:
+                    this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMatcher"];
+                    break;
             }
         }
     }

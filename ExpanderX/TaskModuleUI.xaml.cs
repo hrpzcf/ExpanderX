@@ -56,7 +56,8 @@ namespace ExpanderX
                 try
                 {
                     AbsTaskModule tm = igt.GetTaskModule();
-                    if (tm == null) continue;
+                    if (tm == null)
+                        continue;
                     this.uiListBox_TaskModules.Items.Add(new ListBoxItemImage(tm));
                 }
                 catch (Exception) { }
@@ -152,27 +153,27 @@ namespace ExpanderX
                 }
                 switch (tm.TaskType)
                 {
-                case 0:
-                    this.uiCheckBox_AsMatcher.IsEnabled = true;
-                    this.uiCheckBox_AsExecutor.IsEnabled = false;
-                    this.uiCheckBox_AsMatcher.IsChecked = true;
-                    this.uiTextBox_TaskModuleSkills.Text = "仅支持匹配功能";
-                    break;
-                case 1:
-                    this.uiCheckBox_AsMatcher.IsEnabled = false;
-                    this.uiCheckBox_AsExecutor.IsEnabled = true;
-                    this.uiCheckBox_AsExecutor.IsChecked = true;
-                    this.uiTextBox_TaskModuleSkills.Text = "仅支持执行功能";
-                    break;
-                case 2:
-                    this.uiCheckBox_AsMatcher.IsEnabled = true;
-                    this.uiCheckBox_AsExecutor.IsEnabled = true;
-                    this.uiCheckBox_AsMatcher.IsChecked = false;
-                    this.uiCheckBox_AsExecutor.IsChecked = false;
-                    this.uiTextBox_TaskModuleSkills.Text = "匹配和执行功能";
-                    break;
-                default:
-                    break;
+                    case 0:
+                        this.uiCheckBox_AsMatcher.IsEnabled = true;
+                        this.uiCheckBox_AsExecutor.IsEnabled = false;
+                        this.uiCheckBox_AsMatcher.IsChecked = true;
+                        this.uiTextBox_TaskModuleSkills.Text = "仅支持匹配功能";
+                        break;
+                    case 1:
+                        this.uiCheckBox_AsMatcher.IsEnabled = false;
+                        this.uiCheckBox_AsExecutor.IsEnabled = true;
+                        this.uiCheckBox_AsExecutor.IsChecked = true;
+                        this.uiTextBox_TaskModuleSkills.Text = "仅支持执行功能";
+                        break;
+                    case 2:
+                        this.uiCheckBox_AsMatcher.IsEnabled = true;
+                        this.uiCheckBox_AsExecutor.IsEnabled = true;
+                        this.uiCheckBox_AsMatcher.IsChecked = false;
+                        this.uiCheckBox_AsExecutor.IsChecked = false;
+                        this.uiTextBox_TaskModuleSkills.Text = "匹配和执行功能";
+                        break;
+                    default:
+                        break;
                 }
             }
             catch

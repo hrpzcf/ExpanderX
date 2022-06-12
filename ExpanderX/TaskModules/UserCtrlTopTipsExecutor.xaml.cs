@@ -54,7 +54,8 @@ namespace ExpanderX
                 return "显示弹窗，并显示最后一次探测到的钉钉消息。";
             else if (this.TopTipsType == TIPS_CUSTOMTEXT)
                 return $"显示弹窗并显示自定义内容：\n{this.TopTipsText}";
-            else return "未实现的弹窗类型。";
+            else
+                return "未实现的弹窗类型。";
         }
 
         public override bool IsMatch() { return false; }
