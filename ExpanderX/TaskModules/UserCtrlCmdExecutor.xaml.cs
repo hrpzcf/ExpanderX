@@ -1,5 +1,4 @@
-﻿using CommonUtils;
-using ExpanderXSDK;
+﻿using ExpanderXSDK;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -208,7 +207,7 @@ namespace ExpanderX
                     process.StartInfo.WorkingDirectory = this.workingDir;
                     process.StartInfo.LoadUserProfile = true;
                     process.StartInfo.UseShellExecute = this.useShell;
-                    if (useShell)
+                    if (this.useShell)
                         // 和文档相反，UseShellExecute 为 true 时用此才有效果
                         process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     else
@@ -227,6 +226,12 @@ namespace ExpanderX
         public override bool IsMatch()
         {
             return false;
+        }
+
+        public override string ExecutorDetails()
+        {
+            return $"执行命令：\n{this.fileName}\n\n命令参数：\n{this.args}" +
+                $"\n\n命令执行方式：\n{(this.useShell ? "终端执行" : "创建进程")}";
         }
     }
 }
