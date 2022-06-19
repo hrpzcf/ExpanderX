@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using static System.Environment;
 
 namespace ExpanderX
 {
@@ -34,9 +35,7 @@ namespace ExpanderX
                 this.intervalLower = this.intervalUpper;
                 this.intervalUpper = temp;
             }
-            return new int[] {
-                (int)(this.intervalLower * 1000), (int)(this.intervalUpper * 1000)
-            };
+            return new int[] { (int)(this.intervalLower * 1000), (int)(this.intervalUpper * 1000) };
         }
 
         public string IntervalLower
@@ -69,8 +68,10 @@ namespace ExpanderX
     {
         private static readonly IFormatter fmt = new BinaryFormatter();
         private static Settings curSettings = null;
-        private static readonly DirectoryInfo confDir = new DirectoryInfo(@".\config");
-        private static readonly string conf = Path.Combine(confDir.FullName, "config.bin");
+        private static readonly DirectoryInfo confDir = new DirectoryInfo(
+            Path.Combine(ExpanderXMain.basicFolder, "Config")
+        );
+        private static readonly string confFile = Path.Combine(confDir.FullName, "config.bin");
 
         public static Settings CurSettings
         {
@@ -80,7 +81,11 @@ namespace ExpanderX
                     curSettings = LoadConfig();
                 return curSettings;
             }
-            set { curSettings = value; SaveConfig(value); }
+            set
+            {
+                curSettings = value;
+                SaveConfig(value);
+            }
         }
 
         private static bool SaveConfig(Settings s)
@@ -91,30 +96,34 @@ namespace ExpanderX
                 {
                     confDir.Create();
                 }
-                using (FileStream fs = File.Create(conf))
-                { fmt.Serialize(fs, s); }
+                using (FileStream fs = File.Create(confFile))
+                {
+                    fmt.Serialize(fs, s);
+                }
                 return true;
             }
             catch
             {
-                USER.MessageBox(
-                    IntPtr.Zero, "设置保存失败！", "错误", MB.MB_TOPMOST | MB.MB_ICONERROR);
+                USER.MessageBox(IntPtr.Zero, "设置保存失败！", "错误", MB.MB_TOPMOST | MB.MB_ICONERROR);
                 return false;
             }
         }
 
         private static Settings LoadConfig()
         {
-            if (!File.Exists(conf))
+            if (!File.Exists(confFile))
                 return new Settings();
             try
             {
-                using (FileStream fs = File.OpenRead(conf))
+                using (FileStream fs = File.OpenRead(confFile))
                 {
                     return fmt.Deserialize(fs) is Settings s ? s : new Settings();
                 }
             }
-            catch (Exception) { return new Settings(); }
+            catch (Exception)
+            {
+                return new Settings();
+            }
         }
     }
 }

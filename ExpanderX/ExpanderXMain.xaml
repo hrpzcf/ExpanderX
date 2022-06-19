@@ -123,7 +123,7 @@
                                         Header="停用" />
                                     <MenuItem
                                         Click="OnListBoxRulesDisplayContextMenuDeleteClick"
-                                        Header="删除规则" />
+                                        Header="删除" />
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                         </ListBox>

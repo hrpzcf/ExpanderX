@@ -18,6 +18,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
+using static System.Environment;
 using Forms = System.Windows.Forms;
 
 namespace ExpanderX
@@ -50,8 +51,8 @@ namespace ExpanderX
         private readonly IFormatter formatter = new BinaryFormatter();
         private readonly List<int> confedMatchers = new List<int>();
         private readonly List<int> confedExecutors = new List<int>();
-        private readonly List<AbsTaskModule> confedTaskModules = new List<AbsTaskModule>();
         private readonly List<AbsRuleModel> confedRuleModels = new List<AbsRuleModel>();
+        private readonly List<AbsTaskModule> confedTaskModules = new List<AbsTaskModule>();
 
         /// <summary>
         /// 服务启动和停止事件，以true发布表示启动，false表示停止。
@@ -68,10 +69,18 @@ namespace ExpanderX
         private readonly Forms.NotifyIcon notifyIcon = new Forms.NotifyIcon();
         private readonly WindowInteropHelper windowHelper;
 
-        // 上次服务停止时的各任务模块 Endings 函数的调用结果
+        // 上次服务停止时的各任务模块 Endings 函数的调用结果，暂时无用
         private RuleResult[] RunningResults = null;
-        private readonly DirectoryInfo ruleDir = new DirectoryInfo(@".\rules");
-        private readonly DirectoryInfo plugDir = new DirectoryInfo(@".\plugins");
+        internal static readonly string basicFolder = Path.Combine(
+            GetFolderPath(SpecialFolder.LocalApplicationData),
+            "ExpanderX"
+        );
+        private readonly DirectoryInfo rulesFolder = new DirectoryInfo(
+            Path.Combine(basicFolder, "RuleFiles")
+        );
+        private readonly DirectoryInfo pluginsFolder = new DirectoryInfo(
+            Path.Combine(basicFolder, "Plugins")
+        );
         private readonly RequestHandler reqHandler = new RequestHandler();
 
         /// <summary>
@@ -82,7 +91,7 @@ namespace ExpanderX
             this.CheckIfMutexHasBeenCreated();
             this.InitializeComponent();
             this.LoadMainUIWindowSizeSettings();
-            this.CheckIfLicenseAgreementAccepted();
+            this.CheckLicenseAgreement();
             this.LoadPluginsFromLocalFile();
             this.LoadRulesFromLocalFile();
             this.windowHelper = new WindowInteropHelper(this);
@@ -105,7 +114,7 @@ namespace ExpanderX
                     "程序已运行",
                     MB.MB_TOPMOST | MB.MB_ICONWARNING
                 );
-                Environment.Exit(0);
+                Exit(0);
             }
         }
 
@@ -281,7 +290,7 @@ namespace ExpanderX
         /// <summary>
         /// 检查许可协议是否已被接受。
         /// </summary>
-        private void CheckIfLicenseAgreementAccepted()
+        private void CheckLicenseAgreement()
         {
             Settings s = PubSets.CurSettings;
             if (!s.LicenseAccepted)
@@ -345,24 +354,24 @@ namespace ExpanderX
         /// </summary>
         private void LoadPluginsFromLocalFile()
         {
-            if (!this.plugDir.Exists)
+            if (!this.pluginsFolder.Exists)
             {
                 try
                 {
-                    this.plugDir.Create();
+                    this.pluginsFolder.Create();
                 }
                 catch (Exception)
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法创建目录<{this.plugDir.FullName}>。\n",
+                        $"无法创建目录<{this.pluginsFolder.FullName}>。\n",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
                     return;
                 }
             }
-            FileInfo[] pluginsInfo = this.plugDir.GetFiles();
+            FileInfo[] pluginsInfo = this.pluginsFolder.GetFiles();
             Type typeIGetWU = typeof(IGetTaskModule);
             Type typeUserCtrl = typeof(UserControl);
             foreach (FileInfo fp in pluginsInfo)
@@ -387,9 +396,24 @@ namespace ExpanderX
         /// <returns></returns>
         private void LoadRulesFromLocalFile()
         {
-            if (!this.ruleDir.Exists)
+            if (!this.rulesFolder.Exists)
+            {
+                try
+                {
+                    this.rulesFolder.Create();
+                }
+                catch (Exception e)
+                {
+                    USER.MessageBox(
+                        IntPtr.Zero,
+                        $"无法创建目录<{this.rulesFolder.FullName}>\n原因：{e.Message}",
+                        "错误",
+                        MB.MB_TOPMOST | MB.MB_ICONERROR
+                    );
+                }
                 return;
-            FileInfo[] rulefiles = this.ruleDir.GetFiles();
+            }
+            FileInfo[] rulefiles = this.rulesFolder.GetFiles();
             if (rulefiles.Length == 0)
                 return;
             foreach (FileInfo fi in rulefiles)
@@ -749,17 +773,17 @@ namespace ExpanderX
         /// <returns></returns>
         private void SaveAllRulesAsLocalFile()
         {
-            if (!this.ruleDir.Exists)
+            if (!this.rulesFolder.Exists)
             {
                 try
                 {
-                    this.ruleDir.Create();
+                    this.rulesFolder.Create();
                 }
                 catch (Exception e)
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法创建目录<{this.ruleDir.FullName}>\n原因：{e.Message}",
+                        $"无法创建目录<{this.rulesFolder.FullName}>\n原因：{e.Message}",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
@@ -767,7 +791,7 @@ namespace ExpanderX
                 }
             }
             SHA1 sha1 = SHA1.Create();
-            List<string> saved = this.ruleDir.GetFiles().Select(x => x.Name).ToList();
+            List<string> saved = this.rulesFolder.GetFiles().Select(x => x.Name).ToList();
             foreach (AbsRuleModel rule in this.confedRuleModels)
             {
                 using (Stream ms = new MemoryStream())
@@ -781,7 +805,7 @@ namespace ExpanderX
                         saved.Remove(newName);
                         continue;
                     }
-                    string fullPath = Path.Combine(this.ruleDir.FullName, newName);
+                    string fullPath = Path.Combine(this.rulesFolder.FullName, newName);
                     // 已配置的规则中完全一样的规则不重复保存
                     if (File.Exists(fullPath))
                         continue;
@@ -803,7 +827,7 @@ namespace ExpanderX
             {
                 try
                 {
-                    File.Delete(Path.Combine(this.ruleDir.FullName, fName));
+                    File.Delete(Path.Combine(this.rulesFolder.FullName, fName));
                 }
                 catch (Exception) { }
             }
@@ -816,11 +840,11 @@ namespace ExpanderX
         /// <returns></returns>
         private bool DelRuleFromLocalFile(AbsRuleModel rule)
         {
-            if (!this.ruleDir.Exists)
+            if (!this.rulesFolder.Exists)
             {
                 USER.MessageBox(
                     IntPtr.Zero,
-                    $"不存在规则目录<{this.ruleDir.FullName}>",
+                    $"不存在规则目录<{this.rulesFolder.FullName}>",
                     "错误",
                     MB.MB_TOPMOST | MB.MB_ICONERROR
                 );
@@ -834,7 +858,7 @@ namespace ExpanderX
                 byte[] sha1bys = sha1.ComputeHash(ms);
                 sha1.Dispose();
                 string newName = $"{BitConverter.ToString(sha1bys).Replace("-", "")}.rl";
-                string fullPath = Path.Combine(this.ruleDir.FullName, newName);
+                string fullPath = Path.Combine(this.rulesFolder.FullName, newName);
                 if (!File.Exists(fullPath))
                     return true;
                 try
