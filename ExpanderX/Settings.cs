@@ -63,7 +63,7 @@ namespace ExpanderX
     /// <summary>
     /// 主设置工具集。
     /// </summary>
-    internal static class PubSets
+    internal static class PubSettings
     {
         private static readonly IFormatter fmt = new BinaryFormatter();
         private static Settings curSettings = null;

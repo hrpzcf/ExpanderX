@@ -21,17 +21,17 @@ namespace ExpanderX
 
         private void TopTipsWin_Closing(object sender, CancelEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             if (s.RemTipsWinPos)
                 s.TipsWinPos = new double[] { this.Left, this.Top };
             if (s.RemTipsWinSize)
                 s.TipsWinSize = new double[] { this.Width, this.Height };
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
         }
 
         private void SetupWindowSize()
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             try
             {
                 if (s.RemTipsWinPos)

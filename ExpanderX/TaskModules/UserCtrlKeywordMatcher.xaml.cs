@@ -136,7 +136,7 @@ namespace ExpanderX
 
         public override bool IsMatch()
         {
-            string current = DTTools.GetNameChatting();
+            string current = PubDTools.GetNameChatting();
             if (current == "")
                 return false;
             // 服务运行过程中切换消息框
@@ -151,7 +151,7 @@ namespace ExpanderX
             if (this.Chatting != null && this.Chatting != "")
                 if (current != this.Chatting)
                     return false;
-            List<string[]> msgs = DTTools.GetRecentMessages(1);
+            List<string[]> msgs = PubDTools.GetRecentMessages(1);
             if (msgs.Count < 1)
                 return false;
             string lastSnd = this.lastsender;
@@ -229,7 +229,7 @@ namespace ExpanderX
             string content;
             if (this.lastsender == null || this.lastcontent == null)
             {
-                lastMessages = DTTools.LastFetchedMessages();
+                lastMessages = PubDTools.LatestAcquired();
                 if (lastMessages.Length == 0)
                     return;
                 sender = lastMessages[0][0];

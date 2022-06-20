@@ -29,7 +29,7 @@ namespace ExpanderX
 
         private void LoadUISettings()
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             try
             {
                 if (s.RemAddTaskWinSize)
@@ -186,10 +186,10 @@ namespace ExpanderX
 
         private void OnWindowClosing(object sender, CancelEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             if (s.RemAddTaskWinSize)
                 s.AddTaskWinSize = new double[] { this.Width, this.Height };
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
             this.uiGrid_TaskModuleInterface.Children.Clear();
         }
 

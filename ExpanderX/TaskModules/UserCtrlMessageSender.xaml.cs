@@ -50,7 +50,7 @@ namespace ExpanderX
 
         public override bool Execute()
         {
-            return this.TextToSend == "" || DTTools.SendMessage(this.TextToSend);
+            return this.TextToSend == "" || PubDTools.SendMessage(this.TextToSend);
         }
     }
 }

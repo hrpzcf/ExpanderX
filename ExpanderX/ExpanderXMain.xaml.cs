@@ -230,7 +230,7 @@ namespace ExpanderX
 
         private void LoadMainUIWindowSizeSettings()
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             try
             {
                 if (s.RemMainWinSize)
@@ -249,10 +249,10 @@ namespace ExpanderX
         /// <param name="e"></param>
         private void ExpanderXMainClosing(object sender, CancelEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             if (s.RemMainWinSize)
                 s.MainWinSize = new double[] { this.Width, this.Height };
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
             if (this.ApplicationExitSender == 0 && s.HideToTrayWhenClose)
             {
                 this.Hide();
@@ -292,7 +292,7 @@ namespace ExpanderX
         /// </summary>
         private void CheckLicenseAgreement()
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             if (!s.LicenseAccepted)
             {
                 // 启动新线程以让本主窗口初始化完成
@@ -929,11 +929,11 @@ namespace ExpanderX
                 this.ShowMessageBox("没有已启用的规则。", "提示");
                 return;
             }
-            if (PubSets.CurSettings.CheckIfClientReady)
+            if (PubSettings.CurSettings.CheckIfClientReady)
             {
-                if (!DTTools.DingTalkAllReady && DTTools.InitalizeWait())
+                if (!PubDTools.DingTalkAllReady && PubDTools.InitalizeWait())
                 {
-                    if (!DTTools.DingTalkAllReady)
+                    if (!PubDTools.DingTalkAllReady)
                     {
                         this.ShowMessageBox("钉钉未准备就绪，请检查是否已运行并打开消息框。", "提示");
                         return;

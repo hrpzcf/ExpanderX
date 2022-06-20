@@ -17,23 +17,23 @@ namespace ExpanderX
 
         private void OnButtonAcceptClick(object sender, RoutedEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             s.LicenseAccepted = true;
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
             this.Close();
         }
 
         private void License_Closing(object sender, CancelEventArgs e)
         {
-            if (!PubSets.CurSettings.LicenseAccepted)
+            if (!PubSettings.CurSettings.LicenseAccepted)
                 Environment.Exit(0);
         }
 
         private void OnButtonRejectClick(object sender, RoutedEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             s.LicenseAccepted = false;
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
             this.Close();
         }
     }

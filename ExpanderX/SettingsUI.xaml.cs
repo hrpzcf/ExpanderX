@@ -22,7 +22,7 @@ namespace ExpanderX
 
         private void LoadAndSetSavedSettingsToUI()
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             try
             {
                 this.uiTextBox_IntervalLower.Text = s.IntervalLower;
@@ -52,7 +52,7 @@ namespace ExpanderX
 
         private void OnButtonApplyClick(object sender, RoutedEventArgs e)
         {
-            Settings s = PubSets.CurSettings;
+            Settings s = PubSettings.CurSettings;
             try
             {
                 s.IntervalLower = this.uiTextBox_IntervalLower.Text;
@@ -81,7 +81,7 @@ namespace ExpanderX
                 };
             }
 
-            PubSets.CurSettings = s;
+            PubSettings.CurSettings = s;
             this.uiButton_ApplyConf.IsEnabled = false;
         }
 

@@ -80,6 +80,9 @@
     <Compile Include="TaskModules\UserCtrlCmdExecutor.xaml.cs">
       <DependentUpon>UserCtrlCmdExecutor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TaskModules\UserCtrlTimeMatcher.xaml.cs">
+      <DependentUpon>UserCtrlTimeMatcher.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TaskModuleUI.xaml.cs">
       <DependentUpon>TaskModuleUI.xaml</DependentUpon>
     </Compile>
@@ -127,6 +130,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TaskModules\UserCtrlCmdExecutor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskModules\UserCtrlTimeMatcher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -131,7 +131,7 @@ namespace ExpanderX
             while (this.keepState)
             {
                 long milliseconds = stopwatch.ElapsedMilliseconds;
-                int[] interval = PubSets.CurSettings.Interval();
+                int[] interval = PubSettings.CurSettings.Interval();
                 try
                 { timeIntervalLimit = random.Next(interval[0], interval[1]); }
                 catch { }

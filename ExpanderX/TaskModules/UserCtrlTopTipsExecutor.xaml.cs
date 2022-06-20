@@ -79,14 +79,14 @@ namespace ExpanderX
 
         private void ShowLastMsgsTipsText()
         {
-            string[][] lastMsgs = DTTools.LastFetchedMessages();
+            string[][] lastMsgs = PubDTools.LatestAcquired();
             if (lastMsgs.Length == 0)
                 return;
             TopTipsWin tips = new TopTipsWin()
             {
                 Sender = lastMsgs[0][0],
                 Message = lastMsgs[0][1],
-                NameChatting = DTTools.GetNameChatting()
+                NameChatting = PubDTools.GetNameChatting()
             };
             tips.Show();
         }
