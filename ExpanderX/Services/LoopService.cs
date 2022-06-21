@@ -6,28 +6,12 @@ using System.Threading;
 namespace ExpanderX
 {
     /// <summary>
-    /// 规则的收尾工作运行结果。
-    /// </summary>
-    internal struct RuleResult
-    {
-        /// <summary>
-        /// 所有匹配器的 Endings 方法运行结果。
-        /// </summary>
-        public bool[] MatcherResult;
-
-        /// <summary>
-        /// 所有执行器的 Endings 方法运行结果。
-        /// </summary>
-        public bool[] ExectuorResult;
-    }
-
-    /// <summary>
     /// 循环器。
     /// </summary>
     internal sealed class Circulator
     {
         private AbsRuleModel[] enableRules;
-        private Thread threadSrv;
+        private Thread srvThread;
         private readonly object locker = new object();
         private STATE state = STATE.Stopped;
         private bool keepState = true;
@@ -39,7 +23,7 @@ namespace ExpanderX
         public bool Start(AbsRuleModel[] rules)
         {
             if (this.state == STATE.Running)
-                _ = this.Stop();
+                this.Stop();
             this.enableRules = rules;
             lock (this.locker)
             {
@@ -52,62 +36,33 @@ namespace ExpanderX
         /// 循环服务停止方法。
         /// </summary>
         /// <returns></returns>
-        public RuleResult[] Stop()
+        public bool Stop()
         {
             lock (this.locker)
                 this.keepState = false;
-            if (this.threadSrv == null || !this.threadSrv.IsAlive)
+            if (this.srvThread == null || !this.srvThread.IsAlive)
             {
-                this.threadSrv = null;
-                return new RuleResult[0];
+                this.srvThread = null;
+                return true;
             }
             try
             {
-                this.threadSrv.Interrupt();
-                this.threadSrv.Join();
+                this.srvThread.Interrupt();
+                this.srvThread.Join();
             }
             catch (ThreadStateException) // 不捕获SecurityException
             {
-                return new RuleResult[0];
+                return false;
             }
             catch (ThreadInterruptedException) { }
             finally
             {
-                this.threadSrv = null;
+                this.srvThread = null;
             }
-            if (this.enableRules == null)
-                return new RuleResult[0];
-            RuleResult[] ruleRes = new RuleResult[this.enableRules.Length];
-            for (int i = 0; i < this.enableRules.Length; ++i)
-            {
-                AbsRuleModel r = this.enableRules[i];
-                bool[] sRes = new bool[r.Matchers.Length];
-                for (int j = 0; j < r.Matchers.Length; ++j)
-                {
-                    try
-                    {
-                        sRes[j] = r.TaskModules[r.Matchers[j]].Init();
-                    }
-                    catch (Exception)
-                    {
-                        sRes[j] = false;
-                    }
-                }
-                bool[] eRes = new bool[r.Executors.Length];
-                for (int k = 0; k < r.Executors.Length; ++k)
-                {
-                    try
-                    {
-                        eRes[k] = r.TaskModules[r.Executors[k]].Init();
-                    }
-                    catch (Exception)
-                    {
-                        eRes[k] = false;
-                    }
-                }
-                ruleRes[i] = new RuleResult { MatcherResult = sRes, ExectuorResult = eRes };
-            }
-            return ruleRes;
+            foreach (AbsRuleModel r in this.enableRules)
+                foreach (AbsTaskModule t in r.TaskModules)
+                    _ = t.Init();
+            return true;
         }
 
         public STATE State()
@@ -118,18 +73,21 @@ namespace ExpanderX
 
         private bool CreateLoopThread()
         {
-            if (this.threadSrv != null)
+            if (this.srvThread != null)
                 return false;
             try
             {
-                this.threadSrv = new Thread(this.LoopThreadMain);
-                this.threadSrv.IsBackground = true;
-                this.threadSrv.Start();
+                foreach (AbsRuleModel r in this.enableRules)
+                    foreach (AbsTaskModule t in r.TaskModules)
+                        _ = t.Init();
+                this.srvThread = new Thread(this.LoopThreadMain);
+                this.srvThread.IsBackground = true;
+                this.srvThread.Start();
                 return true;
             }
             catch
             {
-                this.threadSrv = null;
+                this.srvThread = null;
                 return false;
             }
         }

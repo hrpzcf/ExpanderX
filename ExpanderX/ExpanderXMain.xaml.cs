@@ -69,8 +69,6 @@ namespace ExpanderX
         private readonly Forms.NotifyIcon notifyIcon = new Forms.NotifyIcon();
         private readonly WindowInteropHelper windowHelper;
 
-        // 上次服务停止时的各任务模块 Endings 函数的调用结果，暂时无用。
-        private RuleResult[] RunningResults = null;
         internal static readonly string basicFolder = Path.Combine(
             GetFolderPath(SpecialFolder.LocalApplicationData),
             "ExpanderX"
@@ -961,13 +959,13 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 停止服务循环，给当前线程主动调用和‘请求处理器’调用准备的方法。
+        /// 停止服务循环，给当前线程主动调用和‘请求处理器’调用写的方法。
         /// </summary>
         internal void StopService2()
         {
             if (Cycle == null)
                 return;
-            this.RunningResults = Cycle.Stop();
+            _ = Cycle.Stop();
             this.ServiceStartStopEvent?.Invoke(Cmd.Stop);
         }
 
