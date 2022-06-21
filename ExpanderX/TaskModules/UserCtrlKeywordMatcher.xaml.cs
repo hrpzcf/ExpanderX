@@ -139,7 +139,7 @@ namespace ExpanderX
             string current = PubDTools.GetNameChatting();
             if (current == "")
                 return false;
-            // 服务运行过程中切换消息框
+            // 防止运行过程中切换消息框马上发生匹配
             if (this.chattingGot != null && current != this.chattingGot)
             {
                 this.lastsender = null;
@@ -192,7 +192,7 @@ namespace ExpanderX
             return flagSenderInc && flagKeywordInc;
         }
 
-        public override bool Endings()
+        public override bool Init()
         {
             this.lastsender = null;
             this.lastcontent = null;

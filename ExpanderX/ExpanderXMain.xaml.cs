@@ -55,13 +55,13 @@ namespace ExpanderX
         private readonly List<AbsTaskModule> confedTaskModules = new List<AbsTaskModule>();
 
         /// <summary>
-        /// 服务启动和停止事件，以true发布表示启动，false表示停止。
+        /// 服务启动和停止事件，以 Cmd 枚举值表示启动和停止。
         /// </summary>
         private event Action<Cmd> ServiceStartStopEvent = null;
 
         /// <summary>
         /// 程序退出发起者。<br/>
-        /// 0 代表主窗口右上角关闭按钮，1 代表托盘图标退出菜单。
+        /// 0 代表主窗口右上角关闭按钮退出，1 代表托盘图标菜单退出。
         /// </summary>
         private int ApplicationExitSender = 0;
 
@@ -69,7 +69,7 @@ namespace ExpanderX
         private readonly Forms.NotifyIcon notifyIcon = new Forms.NotifyIcon();
         private readonly WindowInteropHelper windowHelper;
 
-        // 上次服务停止时的各任务模块 Endings 函数的调用结果，暂时无用
+        // 上次服务停止时的各任务模块 Endings 函数的调用结果，暂时无用。
         private RuleResult[] RunningResults = null;
         internal static readonly string basicFolder = Path.Combine(
             GetFolderPath(SpecialFolder.LocalApplicationData),
@@ -81,6 +81,10 @@ namespace ExpanderX
         private readonly DirectoryInfo pluginsFolder = new DirectoryInfo(
             Path.Combine(basicFolder, "Plugins")
         );
+
+        /// <summary>
+        /// 请求处理器，专门处理外部发起的 ExpanderX 启停、退出请求。
+        /// </summary>
         private readonly RequestHandler reqHandler = new RequestHandler();
 
         /// <summary>
@@ -350,7 +354,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 从本地 ./plugins 目录加载可用的任务模块。
+        /// 从当前非漫游用户应用程序储存库目录下的 ExpanderX/plugins 目录加载可用的任务模块。
         /// </summary>
         private void LoadPluginsFromLocalFile()
         {
@@ -438,7 +442,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 将已配置的匹配器和执行器合并为规则。此方法
+        /// 将已配置的匹配器和执行器合并为规则。
         /// </summary>
         /// <param name="remark">规则备注名</param>
         private void CombineTaskModulesAsCommonRule(string remark = null)
@@ -696,7 +700,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 主界面“规则启停及描述”标签页三个列表的鼠标键抬起时触发的动作，用于更新该标签页下的“规则、匹配器、执行器详情描述”文本框。
+        /// 主界面“规则编辑及描述”标签页三个列表的鼠标键抬起时触发的动作，用于更新该标签页下的“规则、任务模块详情描述”文本框。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

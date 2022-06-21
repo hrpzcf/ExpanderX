@@ -55,7 +55,7 @@ namespace ExpanderX
         public RuleResult[] Stop()
         {
             lock (this.locker)
-            { this.keepState = false; }
+                this.keepState = false;
             if (this.threadSrv == null || !this.threadSrv.IsAlive)
             {
                 this.threadSrv = null;
@@ -86,25 +86,35 @@ namespace ExpanderX
                 {
                     try
                     {
-                        sRes[j] = r.TaskModules[r.Matchers[j]].Endings();
+                        sRes[j] = r.TaskModules[r.Matchers[j]].Init();
                     }
-                    catch (Exception) { sRes[j] = false; }
+                    catch (Exception)
+                    {
+                        sRes[j] = false;
+                    }
                 }
                 bool[] eRes = new bool[r.Executors.Length];
                 for (int k = 0; k < r.Executors.Length; ++k)
                 {
                     try
                     {
-                        eRes[k] = r.TaskModules[r.Executors[k]].Endings();
+                        eRes[k] = r.TaskModules[r.Executors[k]].Init();
                     }
-                    catch (Exception) { eRes[k] = false; }
+                    catch (Exception)
+                    {
+                        eRes[k] = false;
+                    }
                 }
                 ruleRes[i] = new RuleResult { MatcherResult = sRes, ExectuorResult = eRes };
             }
             return ruleRes;
         }
 
-        public STATE State() { lock (this.locker) { return this.state; } }
+        public STATE State()
+        {
+            lock (this.locker)
+                return this.state;
+        }
 
         private bool CreateLoopThread()
         {
@@ -117,7 +127,11 @@ namespace ExpanderX
                 this.threadSrv.Start();
                 return true;
             }
-            catch { this.threadSrv = null; return false; }
+            catch
+            {
+                this.threadSrv = null;
+                return false;
+            }
         }
 
         private void LoopThreadMain()
@@ -127,28 +141,34 @@ namespace ExpanderX
             long lastMilliseconds = stopwatch.ElapsedMilliseconds;
             Random random = new Random();
             lock (this.locker)
-            { this.state = STATE.Running; }
+                this.state = STATE.Running;
             while (this.keepState)
             {
                 long milliseconds = stopwatch.ElapsedMilliseconds;
                 int[] interval = PubSettings.CurSettings.Interval();
                 try
-                { timeIntervalLimit = random.Next(interval[0], interval[1]); }
+                {
+                    timeIntervalLimit = random.Next(interval[0], interval[1]);
+                }
                 catch { }
                 if (milliseconds - lastMilliseconds < timeIntervalLimit)
                     try
                     {
-                        Thread.Sleep(
-                            (int)(timeIntervalLimit - (milliseconds - lastMilliseconds)));
+                        Thread.Sleep((int)(timeIntervalLimit - (milliseconds - lastMilliseconds)));
                     }
-                    catch (ThreadInterruptedException) { goto StopWatchAndEndLoop; }
+                    catch (ThreadInterruptedException)
+                    {
+                        goto StopWatchAndEndLoop;
+                    }
                 lastMilliseconds = stopwatch.ElapsedMilliseconds;
                 foreach (AbsRuleModel rl in this.enableRules)
-                { rl.ExecuteTask(); }
+                {
+                    rl.ExecuteTask();
+                }
             }
         StopWatchAndEndLoop:
             lock (this.locker)
-            { this.state = STATE.Stopped; }
+                this.state = STATE.Stopped;
             stopwatch.Stop();
         }
     }
