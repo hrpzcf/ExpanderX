@@ -191,7 +191,7 @@ namespace ExpanderX
             get { return "系统命令执行器任务模块"; }
         }
 
-        public override int TaskType
+        public override int ModuleType
         {
             get { return 1; }
         }

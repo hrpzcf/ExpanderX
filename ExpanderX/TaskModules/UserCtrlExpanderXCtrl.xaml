@@ -47,8 +47,11 @@
             Margin="0,10,0,0"
             VerticalAlignment="Top"
             Background="#FFEBEBEB"
-            FontFamily="NSimSun"
-            Text="详情：在 ExpanderX 服务正在运行的时候，此执行器可以请求停止 ExpanderX 服务；如果服务正在运行，而且选项为&quot;启动&quot;，则请求停止服务并重新启动。通常，此执行器应作为规则内的最后一个执行器，因为此执行器执行后 ExpanderX 服务中断，导致后面的执行器很可能不再被执行。"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap">
+            <Run
+                FontWeight="Bold"
+                Text="详情：" />
+            <Run Text="在 ExpanderX 服务正在运行的时候，此执行器可以请求停止 ExpanderX 服务；如果服务正在运行，而且选项为&quot;启动&quot;，则请求停止服务并重新启动。通常，此执行器应作为任务包内的最后一个执行器，因为此执行器执行后 ExpanderX 服务中断，导致后面的执行器很可能不再被执行。" />
+        </TextBlock>
     </Grid>
 </UserControl>

@@ -36,7 +36,7 @@ namespace ExpanderX
     {
         public DTalkMessageSender() { this.TextToSend = ""; }
 
-        public override int TaskType { get { return 1; } }
+        public override int ModuleType { get { return 1; } }
         public string TextToSend { get; set; }
         public override string Name { get { return "自动发送钉钉消息任务模块"; } }
 

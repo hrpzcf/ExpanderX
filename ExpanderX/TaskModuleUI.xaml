@@ -10,7 +10,10 @@
     Height="600"
     MinWidth="800"
     MinHeight="600"
+    Background="#FFF6F6F6"
+    Foreground="#FF323232"
     Icon="/Images/icon.ico"
+    ShowInTaskbar="False"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
     <Grid Margin="3,3,3,3">
@@ -29,6 +32,8 @@
             Grid.RowSpan="3"
             Margin="0,0,0,1"
             d:ItemsSource="{d:SampleData ItemCount=5}"
+            Background="#FFF6F6F6"
+            Foreground="#FF323232"
             SelectionChanged="OnListBoxTaskModulesSelectionChanged" />
         <Grid
             Grid.Column="1"
@@ -132,10 +137,11 @@
                 Padding="10,5,10,5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Background="White"
+                Background="#FFF6F6F6"
                 Click="OnButtonCancelClick"
                 Content="取消"
                 FontSize="14"
+                Foreground="#FF323232"
                 IsCancel="True" />
             <Button
                 x:Name="uiButton_Confirm"
@@ -144,10 +150,11 @@
                 Padding="10,5,10,5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Background="White"
+                Background="#FFF6F6F6"
                 Click="OnButtonConfirmClick"
                 Content="添加配置"
                 FontSize="14"
+                Foreground="#FF323232"
                 IsDefault="True" />
         </Grid>
 

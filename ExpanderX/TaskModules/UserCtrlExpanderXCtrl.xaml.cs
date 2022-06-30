@@ -29,7 +29,7 @@ namespace ExpanderX
     [Serializable]
     public class ExpanderXControler : AbsTaskModule
     {
-        public override int TaskType { get { return 1; } }
+        public override int ModuleType { get { return 1; } }
         public int controlType = 0;
         public override string Name { get { return "ExpanderX服务启停控制器"; } }
 

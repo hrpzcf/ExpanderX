@@ -41,9 +41,8 @@
             Margin="5,0,0,0"
             Padding="0,5,0,5"
             VerticalAlignment="Center"
-            Background="#FFD2D2D2"
-            FontFamily="NSimSun"
-            Text="当同一规则内的匹配器全部符合匹配条件，此执行器将向钉钉输入框输入&quot;要发送的文本&quot;中的内容并发送。"
+            Background="#FFEBEBEB"
+            Text="当同一任务包内的匹配器全部符合匹配条件，此执行器将向钉钉输入框输入&quot;要发送的文本&quot;中的内容并发送。"
             TextWrapping="Wrap" />
     </Grid>
 </UserControl>

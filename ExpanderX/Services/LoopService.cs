@@ -6,11 +6,11 @@ using System.Threading;
 namespace ExpanderX
 {
     /// <summary>
-    /// 循环器。
+    /// 任务包循环器。
     /// </summary>
     internal sealed class Circulator
     {
-        private AbsRuleModel[] enableRules;
+        private AbsTaskPack[] taskPacks;
         private Thread srvThread;
         private readonly object locker = new object();
         private STATE state = STATE.Stopped;
@@ -20,11 +20,11 @@ namespace ExpanderX
         /// 循环服务开始方法。
         /// </summary>
         /// <returns></returns>
-        public bool Start(AbsRuleModel[] rules)
+        public bool Start(AbsTaskPack[] packs)
         {
             if (this.state == STATE.Running)
                 this.Stop();
-            this.enableRules = rules;
+            this.taskPacks = packs;
             lock (this.locker)
             {
                 this.keepState = true;
@@ -59,9 +59,13 @@ namespace ExpanderX
             {
                 this.srvThread = null;
             }
-            foreach (AbsRuleModel r in this.enableRules)
+            foreach (AbsTaskPack r in this.taskPacks)
                 foreach (AbsTaskModule t in r.TaskModules)
-                    _ = t.Init();
+                    try
+                    {
+                        _ = t.Stop();
+                    }
+                    catch { }
             return true;
         }
 
@@ -75,11 +79,16 @@ namespace ExpanderX
         {
             if (this.srvThread != null)
                 return false;
+
+            foreach (AbsTaskPack r in this.taskPacks)
+                foreach (AbsTaskModule t in r.TaskModules)
+                    try
+                    {
+                        _ = t.Init();
+                    }
+                    catch { }
             try
             {
-                foreach (AbsRuleModel r in this.enableRules)
-                    foreach (AbsTaskModule t in r.TaskModules)
-                        _ = t.Init();
                 this.srvThread = new Thread(this.LoopThreadMain);
                 this.srvThread.IsBackground = true;
                 this.srvThread.Start();
@@ -95,7 +104,7 @@ namespace ExpanderX
         private void LoopThreadMain()
         {
             Stopwatch stopwatch = new Stopwatch();
-            long timeIntervalLimit = 100;
+            long roundIntervalLimit = 100;
             long lastMilliseconds = stopwatch.ElapsedMilliseconds;
             Random random = new Random();
             lock (this.locker)
@@ -106,25 +115,25 @@ namespace ExpanderX
                 int[] interval = PubSettings.CurSettings.Interval();
                 try
                 {
-                    timeIntervalLimit = random.Next(interval[0], interval[1]);
+                    roundIntervalLimit = random.Next(interval[0], interval[1]);
                 }
                 catch { }
-                if (milliseconds - lastMilliseconds < timeIntervalLimit)
+                if (milliseconds - lastMilliseconds < roundIntervalLimit)
                     try
                     {
-                        Thread.Sleep((int)(timeIntervalLimit - (milliseconds - lastMilliseconds)));
+                        Thread.Sleep((int)(roundIntervalLimit - (milliseconds - lastMilliseconds)));
                     }
                     catch (ThreadInterruptedException)
                     {
                         goto StopWatchAndEndLoop;
                     }
                 lastMilliseconds = stopwatch.ElapsedMilliseconds;
-                foreach (AbsRuleModel rl in this.enableRules)
+                foreach (AbsTaskPack rl in this.taskPacks)
                 {
                     rl.ExecuteTask();
                 }
             }
-        StopWatchAndEndLoop:
+            StopWatchAndEndLoop:
             lock (this.locker)
                 this.state = STATE.Stopped;
             stopwatch.Stop();

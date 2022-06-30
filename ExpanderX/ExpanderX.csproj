@@ -191,7 +191,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComRules\CommonRule.cs" />
+    <Compile Include="ComPacks\ComTaskPack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

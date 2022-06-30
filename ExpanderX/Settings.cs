@@ -22,8 +22,8 @@ namespace ExpanderX
         public bool HideToTrayWhenClose = true;
         public int ExitWithUnsavedTaskModule = 0;
 
-        private double intervalLower = 1.0;
-        private double intervalUpper = 2.0;
+        private double intervalLower = 0.2;
+        private double intervalUpper = 0.3;
 
         public int[] Interval()
         {

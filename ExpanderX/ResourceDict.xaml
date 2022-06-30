@@ -68,7 +68,7 @@
         x:Key="ImgMixed"
         TargetType="Image">
         <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="28" />
+        <Setter Property="Height" Value="32" />
         <Setter Property="Source" Value="/Images/mixed.png" />
     </Style>
     <Style x:Key="FocusVisual">

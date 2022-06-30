@@ -46,7 +46,7 @@ namespace ExpanderX
         /// 提示填写的内容还是最后一条获取的钉钉消息。
         /// </summary>
         public int TopTipsType { get; set; }
-        public override int TaskType { get { return 1; } }
+        public override int ModuleType { get { return 1; } }
 
         public override string ExecutorDetails()
         {

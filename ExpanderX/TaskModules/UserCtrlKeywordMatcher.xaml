@@ -116,7 +116,7 @@
                             Padding="0,2,0,2"
                             AcceptsReturn="True"
                             HorizontalScrollBarVisibility="Auto"
-                            ToolTip="钉钉消息内容和此内容完全一样时不匹配。&#13;此处留空表示所有消息内容都匹配。&#13;注意，此处设置比&quot;关键词(匹配、不匹配)&quot;优先级高。&#13;当规则中有自动回复消息的执行器时，把自动回复的内容复制一份填到此处。" />
+                            ToolTip="钉钉消息内容和此内容完全一样时不匹配。&#13;此处留空表示所有消息内容都匹配。&#13;注意，此处设置比&quot;关键词(匹配、不匹配)&quot;优先级高。&#13;当任务包中有自动回复消息的执行器时，把自动回复的内容复制一份填到此处。" />
                         <TextBlock
                             Grid.Row="8"
                             Text="使用帮助" />
@@ -125,7 +125,6 @@
                             Grid.ColumnSpan="2"
                             Padding="3,3,3,3"
                             Background="#FFEBEBEB"
-                            FontFamily="NSimSun"
                             TextWrapping="Wrap">
                             <Run Text="探测钉钉当前状态是否同时符合以上三个约束条件：消息框标题、消息发送者(匹配/不匹配)、消息关键词(匹配/不匹配)。 匹配工作从启动服务后接收到的第一条消息开始。发送人和内容与上一条消息完全一样则算是不符合匹配条件。" />
                             <LineBreak />
@@ -173,8 +172,7 @@
                 <TextBlock
                     Grid.Row="4"
                     Background="#FFEBEBEB"
-                    FontFamily="NSimSun"
-                    Text="如果同规则内的全部匹配器都符合匹配条件，则创建一个在所有窗口之上的前台弹窗，用于显示自定义内容或者匹配器检测到的包含关键词的消息的发送者和消息内容。"
+                    Text="如果同任务包内的全部匹配器都符合匹配条件，则创建一个在所有窗口之上的前台弹窗，用于显示自定义内容或者匹配器检测到的包含关键词的消息的发送者和消息内容。"
                     TextWrapping="Wrap" />
             </Grid>
         </GroupBox>

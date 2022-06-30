@@ -14,12 +14,12 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <CheckBox
-            x:Name="uiCheckBox_RuleEnable"
+            x:Name="uiCheckBox_PackEnable"
             Margin="5,3,5,3"
             VerticalAlignment="Center"
-            Click="OnCheckBoxRuleEnableClick" />
+            Click="OnCheckBoxPackEnableClick" />
         <TextBlock
-            x:Name="uiTextBlock_RuleName"
+            x:Name="uiTextBlock_PackName"
             Grid.Column="1"
             Margin="0,3,5,3"
             VerticalAlignment="Center" />

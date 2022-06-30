@@ -27,7 +27,7 @@ namespace ExpanderX
             { Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri)); }
             catch (Exception)
             {
-                USER.MessageBox(this.helper.Handle, "链接打开失败，伤心 o(╥﹏╥)o ~", "伤心", MB.MB_TOPMOST);
+                USER.MessageBox(this.helper.Handle, "无法打开超链接。", "提示", MB.MB_TOPMOST);
                 return;
             }
         }

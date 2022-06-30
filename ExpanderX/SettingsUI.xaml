@@ -35,7 +35,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                 VerticalAlignment="Center"
-                Text="服务运行周期随机间隔(&gt;0.1秒)：" />
+                Text="服务循环耗时下限(&gt;0.1秒，范围内随机)：" />
             <TextBox
                 x:Name="uiTextBox_IntervalLower"
                 Grid.Column="1"
@@ -61,7 +61,7 @@
             Grid.Row="1"
             Margin="0,5,0,0"
             Click="OnUiCheckBoxClick"
-            Content="开启服务前检查聊天工具PC端是否就绪"
+            Content="启动服务时检查聊天工具是否已准备就绪"
             IsChecked="True" />
         <CheckBox
             x:Name="uiCheckBox_RemTipsWinPos"
@@ -120,7 +120,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                 VerticalAlignment="Center"
-                Text="程序退出时有未合并的任务模块" />
+                Text="程序退出时有未打包的任务模块" />
             <ComboBox
                 x:Name="uiComBox_UnsavedTaskModules"
                 Grid.Column="1"
@@ -128,7 +128,7 @@
                 HorizontalAlignment="Left"
                 SelectedIndex="0">
                 <ComboBoxItem Content="询问是否退出" />
-                <ComboBoxItem Content="合并然后退出" />
+                <ComboBoxItem Content="打包然后退出" />
                 <ComboBoxItem Content="丢弃然后退出" />
             </ComboBox>
         </Grid>

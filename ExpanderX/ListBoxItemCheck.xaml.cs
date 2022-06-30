@@ -9,33 +9,35 @@ namespace ExpanderX
     /// </summary>
     public partial class ListBoxItemCheck : UserControl
     {
-        private readonly AbsRuleModel rule = null;
+        private readonly AbsTaskPack pack = null;
 
-        public ListBoxItemCheck(AbsRuleModel rule)
+        public ListBoxItemCheck(AbsTaskPack pack)
         {
             this.InitializeComponent();
-            this.uiTextBlock_RuleName.Text = rule.CustomName;
-            this.uiCheckBox_RuleEnable.IsChecked = rule.IsEnable;
-            this.rule = rule;
+            this.pack = pack;
+            this.uiTextBlock_PackName.Text = pack.CustomName;
+            this.uiCheckBox_PackEnable.IsChecked = pack.IsEnable;
         }
 
         /// <summary>
-        /// 包含的通用规则实例。
+        /// 包含的通用任务包实例。
         /// </summary>
-        public AbsRuleModel Rule { get { return this.rule; } }
-
-        private void OnCheckBoxRuleEnableClick(object sender, RoutedEventArgs e)
+        public AbsTaskPack TaskPack
         {
-            if (this.rule == null)
+            get { return this.pack; }
+        }
+
+        private void OnCheckBoxPackEnableClick(object sender, RoutedEventArgs e)
+        {
+            if (this.pack == null)
                 return;
-            this.rule.IsEnable = this.uiCheckBox_RuleEnable.IsChecked ?? false;
+            this.pack.IsEnable = this.uiCheckBox_PackEnable.IsChecked ?? false;
         }
 
         internal void ChangeCheckedState(bool state)
         {
-
-            this.rule.IsEnable = state;
-            this.uiCheckBox_RuleEnable.IsChecked = state;
+            this.pack.IsEnable = state;
+            this.uiCheckBox_PackEnable.IsChecked = state;
         }
     }
 }

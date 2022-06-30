@@ -43,6 +43,7 @@ namespace ExpanderX
         private readonly List<UserControl> ifaceTaskModules = new List<UserControl>
         {
             new UserCtrlKeywordDetector(),
+            new UserCtrlTimeMatcher(),
             new UserCtrlExpanderXCtrl(),
             new UserCtrlMessageSender(),
             new UserCtrlCmdExecutor(),
@@ -51,7 +52,7 @@ namespace ExpanderX
         private readonly IFormatter formatter = new BinaryFormatter();
         private readonly List<int> confedMatchers = new List<int>();
         private readonly List<int> confedExecutors = new List<int>();
-        private readonly List<AbsRuleModel> confedRuleModels = new List<AbsRuleModel>();
+        private readonly List<AbsTaskPack> confedTaskPacks = new List<AbsTaskPack>();
         private readonly List<AbsTaskModule> confedTaskModules = new List<AbsTaskModule>();
 
         /// <summary>
@@ -73,8 +74,8 @@ namespace ExpanderX
             GetFolderPath(SpecialFolder.LocalApplicationData),
             "ExpanderX"
         );
-        private readonly DirectoryInfo rulesFolder = new DirectoryInfo(
-            Path.Combine(basicFolder, "RuleFiles")
+        private readonly DirectoryInfo packsFolder = new DirectoryInfo(
+            Path.Combine(basicFolder, "Packs")
         );
         private readonly DirectoryInfo pluginsFolder = new DirectoryInfo(
             Path.Combine(basicFolder, "Plugins")
@@ -95,7 +96,7 @@ namespace ExpanderX
             this.LoadMainUIWindowSizeSettings();
             this.CheckLicenseAgreement();
             this.LoadPluginsFromLocalFile();
-            this.LoadRulesFromLocalFile();
+            this.LoadPacksFromLocalFile();
             this.windowHelper = new WindowInteropHelper(this);
             this.Closing += this.ExpanderXMainClosing;
             this.ServiceStartStopEvent += this.SetupByRunningState;
@@ -128,7 +129,7 @@ namespace ExpanderX
                 this.uiButton_Stop.IsEnabled = true;
                 this.notifyIcon.ContextMenu.MenuItems[0].Enabled = false;
                 this.notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
-                this.uiListBox_ConfedRulesDisplay.IsEnabled = false;
+                this.uiListBox_ConfedPacksDisplay.IsEnabled = false;
                 this.notifyIcon.Text = "ExpanderX\n循环服务已开启";
                 this.uiProgressBar_RunState.IsIndeterminate = true;
             }
@@ -138,7 +139,7 @@ namespace ExpanderX
                 this.uiButton_Stop.IsEnabled = false;
                 this.notifyIcon.ContextMenu.MenuItems[0].Enabled = true;
                 this.notifyIcon.ContextMenu.MenuItems[1].Enabled = false;
-                this.uiListBox_ConfedRulesDisplay.IsEnabled = true;
+                this.uiListBox_ConfedPacksDisplay.IsEnabled = true;
                 this.notifyIcon.Text = "ExpanderX\n循环服务已停止";
                 this.uiProgressBar_RunState.IsIndeterminate = false;
             }
@@ -148,7 +149,7 @@ namespace ExpanderX
                 this.uiButton_Stop.IsEnabled = true;
                 this.notifyIcon.ContextMenu.MenuItems[0].Enabled = true;
                 this.notifyIcon.ContextMenu.MenuItems[1].Enabled = true;
-                this.uiListBox_ConfedRulesDisplay.IsEnabled = true;
+                this.uiListBox_ConfedPacksDisplay.IsEnabled = true;
                 this.notifyIcon.Text = "ExpanderX\n循环服务已停止";
                 this.uiProgressBar_RunState.IsIndeterminate = false;
             }
@@ -158,7 +159,7 @@ namespace ExpanderX
         {
             Forms.MenuItem menuItemStartSrv = new Forms.MenuItem();
             menuItemStartSrv.Click += this.MenuItemStartSrvClick;
-            menuItemStartSrv.Text = "开启服务";
+            menuItemStartSrv.Text = "启动服务";
             Forms.MenuItem menuItemStopSrv = new Forms.MenuItem();
             menuItemStopSrv.Click += this.MenuItemStopSrvClick;
             menuItemStopSrv.Text = "停止服务";
@@ -198,7 +199,7 @@ namespace ExpanderX
         {
             this.reqHandler.Stop();
             this.StopService2();
-            this.SaveAllRulesAsLocalFile();
+            this.SaveAllPacksAsLocalFile();
             this.mutex?.Dispose();
             this.notifyIcon.Dispose();
         }
@@ -269,7 +270,7 @@ namespace ExpanderX
                     case 0:
                         int res = USER.MessageBox(
                             this.windowHelper.Handle,
-                            "还有未合并成规则的任务模块，确定退出吗？",
+                            "还有未打包成任务包的任务模块，确定退出吗？",
                             "提示",
                             MB.MB_OKCANCEL | MB.MB_TOPMOST
                         );
@@ -280,7 +281,7 @@ namespace ExpanderX
                         }
                         break;
                     case 1:
-                        this.CombineTaskModulesAsCommonRule();
+                        this.CombineTaskModulesAsComPack();
                         break;
                     case 2:
                         break;
@@ -362,11 +363,11 @@ namespace ExpanderX
                 {
                     this.pluginsFolder.Create();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法创建目录<{this.pluginsFolder.FullName}>。\n",
+                        $"无法创建目录<{this.pluginsFolder.FullName}>。\n\n出错原因：\n{e.Message}",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
@@ -393,45 +394,45 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 从本地二进制文件加载已保存的规则，主窗口启动时触发。
+        /// 从本地二进制文件加载已保存的任务包，主窗口启动时触发。
         /// </summary>
         /// <returns></returns>
-        private void LoadRulesFromLocalFile()
+        private void LoadPacksFromLocalFile()
         {
-            if (!this.rulesFolder.Exists)
+            if (!this.packsFolder.Exists)
             {
                 try
                 {
-                    this.rulesFolder.Create();
+                    this.packsFolder.Create();
                 }
                 catch (Exception e)
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法创建目录<{this.rulesFolder.FullName}>\n原因：{e.Message}",
+                        $"无法创建目录<{this.packsFolder.FullName}>。\n\n出错原因：\n{e.Message}",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
                 }
                 return;
             }
-            FileInfo[] rulefiles = this.rulesFolder.GetFiles();
-            if (rulefiles.Length == 0)
+            FileInfo[] packFiles = this.packsFolder.GetFiles();
+            if (packFiles.Length == 0)
                 return;
-            foreach (FileInfo fi in rulefiles)
+            foreach (FileInfo fi in packFiles)
             {
                 try
                 {
                     using (FileStream fs = File.OpenRead(fi.FullName))
                     {
-                        if (this.formatter.Deserialize(fs) is AbsRuleModel rl)
+                        if (this.formatter.Deserialize(fs) is AbsTaskPack rl)
                         {
-                            this.uiListBox_ConfedRulesDisplay.Items.Add(new ListBoxItemCheck(rl));
-                            this.confedRuleModels.Add(rl);
+                            this.uiListBox_ConfedPacksDisplay.Items.Add(new ListBoxItemCheck(rl));
+                            this.confedTaskPacks.Add(rl);
                         }
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     continue;
                 }
@@ -440,29 +441,29 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 将已配置的匹配器和执行器合并为规则。
+        /// 将已配置的匹配器和执行器打包为任务包。
         /// </summary>
-        /// <param name="remark">规则备注名</param>
-        private void CombineTaskModulesAsCommonRule(string remark = null)
+        /// <param name="remark">任务包备注名</param>
+        private void CombineTaskModulesAsComPack(string remark = null)
         {
             if (this.confedMatchers.Count == 0 || this.confedExecutors.Count == 0)
                 return;
             if (remark == null)
-                remark = "自动保存的规则";
+                remark = "自动保存的任务包";
             if (string.IsNullOrEmpty(remark))
             {
-                this.ShowMessageBox("规则备注名不能为空，请先填写规则备注名。", "提示");
+                this.ShowMessageBox("任务包备注名不能为空，请先填写任务包备注名。", "提示");
                 return;
             }
-            CommonRule rl = new CommonRule
+            ComTaskPack rl = new ComTaskPack
             {
                 CustomName = remark,
                 Executors = this.confedExecutors.ToArray(),
                 Matchers = this.confedMatchers.ToArray(),
                 TaskModules = this.confedTaskModules.ToArray(),
             };
-            this.confedRuleModels.Add(rl);
-            this.uiListBox_ConfedRulesDisplay.Items.Add(new ListBoxItemCheck(rl));
+            this.confedTaskPacks.Add(rl);
+            this.uiListBox_ConfedPacksDisplay.Items.Add(new ListBoxItemCheck(rl));
             this.confedTaskModules.Clear();
             this.confedMatchers.Clear();
             this.confedExecutors.Clear();
@@ -472,11 +473,11 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 在主界面添加了已配置的“匹配器”和“执行器”后，点击“合成规则”按钮触发的动作。
+        /// 在主界面添加了已配置的“匹配器”和“执行器”后，点击“合成任务包”按钮触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnButtonCombineTaskModulesAsRuleClick(object sender, RoutedEventArgs e)
+        private void OnButtonCombineTaskModulesAsPackClick(object sender, RoutedEventArgs e)
         {
             if (this.confedMatchers.Count < 1 || this.confedExecutors.Count < 1)
             {
@@ -486,14 +487,14 @@ namespace ExpanderX
             new LineInputBox()
             {
                 Owner = this,
-                TextOut = this.CombineTaskModulesAsCommonRule,
-                Title = "合并任务模块",
-                Description = "请输入规则备注名：",
+                TextOut = this.CombineTaskModulesAsComPack,
+                Title = "打包任务模块",
+                Description = "请输入任务包备注名：",
             }.ShowDialog();
         }
 
         /// <summary>
-        /// 主界面“规则添加及删除”标签页的任务模块添加按钮的点击事件触发的动作。
+        /// 主界面“任务包添加及删除”标签页的任务模块添加按钮的点击事件触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -509,31 +510,31 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 点击“规则添加及删除”标签页下的“删除选中规则”按钮触发的动作。
+        /// 点击“任务包添加及删除”标签页下的“删除选中任务包”按钮触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnListBoxRulesDisplayContextMenuDeleteClick(object sender, RoutedEventArgs e)
+        private void OnListBoxPacksDisplayContextMenuDeleteClick(object sender, RoutedEventArgs e)
         {
-            int index = this.uiListBox_ConfedRulesDisplay.SelectedIndex;
+            int index = this.uiListBox_ConfedPacksDisplay.SelectedIndex;
             if (index == -1)
                 return;
             int res = USER.MessageBox(
                 this.windowHelper.Handle,
-                "确定删除此规则吗？",
+                "确定删除此任务包吗？",
                 "提示",
                 MB.MB_OKCANCEL | MB.MB_TOPMOST
             );
             if (res != 1)
                 return;
-            this.confedRuleModels.RemoveAt(index);
-            this.uiListBox_ConfedRulesDisplay.Items.RemoveAt(index);
-            if (index == this.confedRuleModels.Count)
+            this.confedTaskPacks.RemoveAt(index);
+            this.uiListBox_ConfedPacksDisplay.Items.RemoveAt(index);
+            if (index == this.confedTaskPacks.Count)
                 --index;
-            this.uiListBox_ConfedRulesDisplay.SelectedIndex = index;
+            this.uiListBox_ConfedPacksDisplay.SelectedIndex = index;
             this.uiListBox_ConfedMatchersDisplay.Items.Clear();
             this.uiListBox_ConfedExecutorsDisplay.Items.Clear();
-            this.uiTextBlock_DisplayRuleDetExeDescription.Text = "";
+            this.uiTextBlock_DisplayPackDetExeDescription.Text = "";
         }
 
         private void UpdateUiListBoxMatchersAndExecutors()
@@ -547,7 +548,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 主界面“规则添加及删除”标签页的“以任务模块分类”下的“删除”按钮按下事件触发的动作。
+        /// 主界面“任务包添加及删除”标签页的“以任务模块分类”下的“删除”按钮按下事件触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -573,7 +574,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 主界面“规则添加及删除”标签页的“匹配器”或“执行器”子页下的“下移”按钮按下事件触发的动作。
+        /// 主界面“任务包添加及删除”标签页的“匹配器”或“执行器”子页下的“下移”按钮按下事件触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -616,7 +617,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 主界面“规则添加及删除”标签页的“匹配器配置”或“执行器配置”子页下的“上移”按钮按下事件触发的动作。
+        /// 主界面“任务包添加及删除”标签页的“匹配器配置”或“执行器配置”子页下的“上移”按钮按下事件触发的动作。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -668,9 +669,9 @@ namespace ExpanderX
             {
                 Process.Start(new ProcessStartInfo(link.NavigateUri.AbsoluteUri));
             }
-            catch (Exception)
+            catch (Exception r)
             {
-                this.ShowMessageBox("打不开链接，伤心 o(╥﹏╥)o ~", "伤心");
+                this.ShowMessageBox($"无法打开超链接。\n\n出错原因：\n{r.Message}", "提示");
                 return;
             }
         }
@@ -698,7 +699,7 @@ namespace ExpanderX
         }
 
         /// <summary>
-        /// 主界面“规则编辑及描述”标签页三个列表的鼠标键抬起时触发的动作，用于更新该标签页下的“规则、任务模块详情描述”文本框。
+        /// 主界面“任务包管理”标签页三个列表的鼠标键抬起时触发的动作，用于更新该标签页下的“任务包、任务模块详情描述”文本框。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -709,83 +710,82 @@ namespace ExpanderX
             int index = listbox.SelectedIndex;
             if (index == -1)
                 return;
-            int ruleIndex = this.uiListBox_ConfedRulesDisplay.SelectedIndex;
-            if (ruleIndex == -1)
+            int packIndex = this.uiListBox_ConfedPacksDisplay.SelectedIndex;
+            if (packIndex == -1)
                 return;
-            this.uiTextBlock_DisplayRuleDetExeDescription.Text = "";
-            if (listbox == this.uiListBox_ConfedRulesDisplay)
+            this.uiTextBlock_DisplayPackDetExeDescription.Text = "";
+            if (listbox == this.uiListBox_ConfedPacksDisplay)
             {
                 try
                 {
-                    description = this.confedRuleModels[index].Description();
+                    description = this.confedTaskPacks[index].Description();
                 }
-                catch (Exception)
+                catch (Exception r)
                 {
-                    this.ShowMessageBox("任务模块异常：无法获取规则实例描述。", "错误");
+                    this.ShowMessageBox($"任务模块异常：无法获取任务包实例描述。\n\n出错原因：\n{r.Message}", "错误");
                     return;
                 }
                 this.uiListBox_ConfedMatchersDisplay.Items.Clear();
-                foreach (int i in this.confedRuleModels[index].Matchers)
+                foreach (int i in this.confedTaskPacks[index].Matchers)
                     this.uiListBox_ConfedMatchersDisplay.Items.Add(
-                        this.confedRuleModels[index].TaskModules[i].CustomName
+                        this.confedTaskPacks[index].TaskModules[i].CustomName
                     );
                 this.uiListBox_ConfedExecutorsDisplay.Items.Clear();
-                foreach (int i in this.confedRuleModels[index].Executors)
+                foreach (int i in this.confedTaskPacks[index].Executors)
                     this.uiListBox_ConfedExecutorsDisplay.Items.Add(
-                        this.confedRuleModels[index].TaskModules[i].CustomName
+                        this.confedTaskPacks[index].TaskModules[i].CustomName
                     );
-                this.uiTextBlock_DisplayRuleDetExeDescription.Text = description;
+                this.uiTextBlock_DisplayPackDetExeDescription.Text = description;
             }
             else if (listbox == this.uiListBox_ConfedMatchersDisplay)
             {
                 try
                 {
-                    description = this.confedRuleModels[ruleIndex].TaskModules[
-                        this.confedRuleModels[ruleIndex].Matchers[index]
+                    description = this.confedTaskPacks[packIndex].TaskModules[
+                        this.confedTaskPacks[packIndex].Matchers[index]
                     ].MatcherDetails();
                 }
-                catch (Exception)
+                catch (Exception r)
                 {
-                    this.ShowMessageBox("任务模块异常：无法获取匹配器实例描述。", "错误");
+                    this.ShowMessageBox($"任务模块异常：无法获取匹配器实例描述。\n\n出错原因：\n{r.Message}", "错误");
                     return;
                 }
-                this.uiTextBlock_DisplayRuleDetExeDescription.Text = description;
+                this.uiTextBlock_DisplayPackDetExeDescription.Text = description;
             }
             else if (listbox == this.uiListBox_ConfedExecutorsDisplay)
             {
                 try
                 {
-                    description = this.confedRuleModels[ruleIndex].TaskModules[
-                        this.confedRuleModels[ruleIndex].Executors[index]
+                    description = this.confedTaskPacks[packIndex].TaskModules[
+                        this.confedTaskPacks[packIndex].Executors[index]
                     ].ExecutorDetails();
                 }
-                catch (Exception)
+                catch (Exception r)
                 {
-                    this.ShowMessageBox("任务模块异常：无法获取执行器实例描述。", "错误");
+                    this.ShowMessageBox($"任务模块异常：无法获取执行器实例描述。\n\n出错原因：\n{r.Message}", "错误");
                     return;
                 }
-                this.uiTextBlock_DisplayRuleDetExeDescription.Text = description;
+                this.uiTextBlock_DisplayPackDetExeDescription.Text = description;
             }
         }
 
         /// <summary>
-        /// 将所有的规则保存到本地指定目录。
+        /// 将所有的任务包保存到本地指定目录。
         /// </summary>
-        /// <param name="rule"></param>
         /// <returns></returns>
-        private void SaveAllRulesAsLocalFile()
+        private void SaveAllPacksAsLocalFile()
         {
-            if (!this.rulesFolder.Exists)
+            if (!this.packsFolder.Exists)
             {
                 try
                 {
-                    this.rulesFolder.Create();
+                    this.packsFolder.Create();
                 }
                 catch (Exception e)
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法创建目录<{this.rulesFolder.FullName}>\n原因：{e.Message}",
+                        $"无法创建目录<{this.packsFolder.FullName}>。\n\n出错原因：\n{e.Message}",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
@@ -793,12 +793,12 @@ namespace ExpanderX
                 }
             }
             SHA1 sha1 = SHA1.Create();
-            List<string> saved = this.rulesFolder.GetFiles().Select(x => x.Name).ToList();
-            foreach (AbsRuleModel rule in this.confedRuleModels)
+            List<string> saved = this.packsFolder.GetFiles().Select(x => x.Name).ToList();
+            foreach (AbsTaskPack tp in this.confedTaskPacks)
             {
                 using (Stream ms = new MemoryStream())
                 {
-                    this.formatter.Serialize(ms, rule);
+                    this.formatter.Serialize(ms, tp);
                     ms.Seek(0, SeekOrigin.Begin);
                     byte[] sha1bys = sha1.ComputeHash(ms);
                     string newName = $"{BitConverter.ToString(sha1bys).Replace("-", "")}.rl";
@@ -807,18 +807,18 @@ namespace ExpanderX
                         saved.Remove(newName);
                         continue;
                     }
-                    string fullPath = Path.Combine(this.rulesFolder.FullName, newName);
-                    // 已配置的规则中完全一样的规则不重复保存
+                    string fullPath = Path.Combine(this.packsFolder.FullName, newName);
+                    // 已配置的任务包中完全一样的任务包不重复保存
                     if (File.Exists(fullPath))
                         continue;
                     try
                     {
                         using (FileStream fs = File.Create(fullPath))
                         {
-                            this.formatter.Serialize(fs, rule);
+                            this.formatter.Serialize(fs, tp);
                         }
                     }
-                    catch (Exception)
+                    catch
                     {
                         continue;
                     }
@@ -829,24 +829,24 @@ namespace ExpanderX
             {
                 try
                 {
-                    File.Delete(Path.Combine(this.rulesFolder.FullName, fName));
+                    File.Delete(Path.Combine(this.packsFolder.FullName, fName));
                 }
-                catch (Exception) { }
+                catch { }
             }
         }
 
         /// <summary>
-        /// 将指定已保存的规则从本地目录中删除。
+        /// 将指定已保存的任务包从本地目录中删除。
         /// </summary>
-        /// <param name="rule"></param>
+        /// <param name="pack"></param>
         /// <returns></returns>
-        private bool DelRuleFromLocalFile(AbsRuleModel rule)
+        private bool DeletelPackFromLocalFile(AbsTaskPack pack)
         {
-            if (!this.rulesFolder.Exists)
+            if (!this.packsFolder.Exists)
             {
                 USER.MessageBox(
                     IntPtr.Zero,
-                    $"不存在规则目录<{this.rulesFolder.FullName}>",
+                    $"不存在任务包目录<{this.packsFolder.FullName}>",
                     "错误",
                     MB.MB_TOPMOST | MB.MB_ICONERROR
                 );
@@ -854,13 +854,13 @@ namespace ExpanderX
             }
             using (Stream ms = new MemoryStream())
             {
-                this.formatter.Serialize(ms, rule);
+                this.formatter.Serialize(ms, pack);
                 ms.Seek(0, SeekOrigin.Begin);
                 SHA1 sha1 = SHA1.Create();
                 byte[] sha1bys = sha1.ComputeHash(ms);
                 sha1.Dispose();
                 string newName = $"{BitConverter.ToString(sha1bys).Replace("-", "")}.rl";
-                string fullPath = Path.Combine(this.rulesFolder.FullName, newName);
+                string fullPath = Path.Combine(this.packsFolder.FullName, newName);
                 if (!File.Exists(fullPath))
                     return true;
                 try
@@ -871,7 +871,7 @@ namespace ExpanderX
                 {
                     USER.MessageBox(
                         IntPtr.Zero,
-                        $"无法删除规则<{fullPath}>\n原因：{e.Message}",
+                        $"无法删除任务包<{fullPath}>。\n\n出错原因：\n{e.Message}",
                         "错误",
                         MB.MB_TOPMOST | MB.MB_ICONERROR
                     );
@@ -906,12 +906,12 @@ namespace ExpanderX
         /// </summary>
         internal void StartService2()
         {
-            AbsRuleModel[] rules = this.confedRuleModels.Where(x => x.IsEnable).ToArray();
-            if (rules.Length == 0)
+            AbsTaskPack[] packs = this.confedTaskPacks.Where(x => x.IsEnable).ToArray();
+            if (packs.Length == 0)
                 return;
             if (Cycle != null && Cycle.State() != STATE.Stopped)
                 _ = Cycle.Stop();
-            Cycle.Start(rules);
+            Cycle.Start(packs);
             this.ServiceStartStopEvent?.Invoke(Cmd.Start);
         }
 
@@ -920,15 +920,15 @@ namespace ExpanderX
         /// </summary>
         private void StartService3()
         {
-            if (this.confedRuleModels.Count == 0)
+            if (this.confedTaskPacks.Count == 0)
             {
-                this.ShowMessageBox("没有可用的自定义规则。", "提示");
+                this.ShowMessageBox("没有可用的自定义任务包。", "提示");
                 return;
             }
-            AbsRuleModel[] rules = this.confedRuleModels.Where(x => x.IsEnable).ToArray();
-            if (rules.Length == 0)
+            AbsTaskPack[] packs = this.confedTaskPacks.Where(x => x.IsEnable).ToArray();
+            if (packs.Length == 0)
             {
-                this.ShowMessageBox("没有已启用的规则。", "提示");
+                this.ShowMessageBox("没有已启用的任务包。", "提示");
                 return;
             }
             if (PubSettings.CurSettings.CheckIfClientReady)
@@ -944,7 +944,7 @@ namespace ExpanderX
             }
             if (Cycle != null && Cycle.State() != STATE.Stopped)
                 _ = Cycle.Stop();
-            Cycle.Start(rules);
+            Cycle.Start(packs);
             this.ServiceStartStopEvent?.Invoke(Cmd.Start);
         }
 
@@ -983,7 +983,7 @@ namespace ExpanderX
                 this.uiCheckBox_ExcEnable.IsChecked = false;
                 return;
             }
-            switch (this.confedTaskModules[index].TaskType)
+            switch (this.confedTaskModules[index].ModuleType)
             {
                 case 2:
                     this.uiCheckBox_SigEnable.IsEnabled = true;
@@ -1040,7 +1040,7 @@ namespace ExpanderX
             if (index == -1)
                 return;
             CheckBox checkbox = sender as CheckBox;
-            if (this.confedTaskModules[index].TaskType != 2)
+            if (this.confedTaskModules[index].ModuleType != 2)
             {
                 checkbox.IsChecked = true;
                 this.ShowMessageBox("当前任务模块仅支持单功能，无法取消。", "提示");
@@ -1106,46 +1106,46 @@ namespace ExpanderX
                 this.uiListBox_ConfedTaskModules.SelectedIndex = this.confedExecutors[index];
         }
 
-        private void RenameSelectedRule(string name)
+        private void RenameSelectedTaskPack(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
-                this.ShowMessageBox("规则名称不能为空！", "提示");
+                this.ShowMessageBox("任务包名称不能为空！", "提示");
                 return;
             }
-            int index = this.uiListBox_ConfedRulesDisplay.SelectedIndex;
+            int index = this.uiListBox_ConfedPacksDisplay.SelectedIndex;
             if (index == -1)
                 return;
-            this.confedRuleModels[index].CustomName = name;
-            this.uiListBox_ConfedRulesDisplay.Items[index] = new ListBoxItemCheck(
-                this.confedRuleModels[index]
+            this.confedTaskPacks[index].CustomName = name;
+            this.uiListBox_ConfedPacksDisplay.Items[index] = new ListBoxItemCheck(
+                this.confedTaskPacks[index]
             );
         }
 
-        private void OnListBoxRulesDisplayContextMenuRenameClick(object sender, RoutedEventArgs e)
+        private void OnListBoxPacksDisplayContextMenuRenameClick(object sender, RoutedEventArgs e)
         {
-            if (this.uiListBox_ConfedRulesDisplay.SelectedItem is ListBoxItemCheck checkableItem)
+            if (this.uiListBox_ConfedPacksDisplay.SelectedItem is ListBoxItemCheck checkableItem)
             {
                 new LineInputBox()
                 {
                     Owner = this,
                     Description = "请输入备注名：",
                     Title = "重命名",
-                    TextOut = RenameSelectedRule,
-                    PresetText = checkableItem.Rule.CustomName,
+                    TextOut = RenameSelectedTaskPack,
+                    PresetText = checkableItem.TaskPack.CustomName,
                 }.ShowDialog();
             }
         }
 
-        private void OnListBoxRulesDisplayContextMenuEnableClick(object sender, RoutedEventArgs e)
+        private void OnListBoxPacksDisplayContextMenuEnableClick(object sender, RoutedEventArgs e)
         {
-            if (this.uiListBox_ConfedRulesDisplay.SelectedItem is ListBoxItemCheck checkableItem)
+            if (this.uiListBox_ConfedPacksDisplay.SelectedItem is ListBoxItemCheck checkableItem)
                 checkableItem.ChangeCheckedState(true);
         }
 
-        private void OnListBoxRulesDisplayContextMenuDisableClick(object sender, RoutedEventArgs e)
+        private void OnListBoxPacksDisplayContextMenuDisableClick(object sender, RoutedEventArgs e)
         {
-            if (this.uiListBox_ConfedRulesDisplay.SelectedItem is ListBoxItemCheck checkableItem)
+            if (this.uiListBox_ConfedPacksDisplay.SelectedItem is ListBoxItemCheck checkableItem)
                 checkableItem.ChangeCheckedState(false);
         }
 

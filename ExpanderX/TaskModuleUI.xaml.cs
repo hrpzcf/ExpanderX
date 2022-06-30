@@ -15,6 +15,7 @@ namespace ExpanderX
     public partial class AddTaskModuleUI : Window
     {
         private readonly WindowInteropHelper helper;
+
         public AddTaskModuleUI()
         {
             this.InitializeComponent();
@@ -60,7 +61,7 @@ namespace ExpanderX
                         continue;
                     this.uiListBox_TaskModules.Items.Add(new ListBoxItemImage(tm));
                 }
-                catch (Exception) { }
+                catch { }
             }
             if (this.CustomControls.Count > 0)
                 this.uiListBox_TaskModules.SelectedIndex = 0;
@@ -86,8 +87,10 @@ namespace ExpanderX
                 this.ShowMessageBox("没有填写配置备注名，请先填写备注名。", "提示");
                 return;
             }
-            if (!this.uiCheckBox_AsMatcher.IsChecked.GetValueOrDefault()
-                && !this.uiCheckBox_AsExecutor.IsChecked.GetValueOrDefault())
+            if (
+                !this.uiCheckBox_AsMatcher.IsChecked.GetValueOrDefault()
+                && !this.uiCheckBox_AsExecutor.IsChecked.GetValueOrDefault()
+            )
             {
                 this.ShowMessageBox("任务模块匹配功能和执行功能至少选择其一。", "提示");
                 return;
@@ -116,22 +119,32 @@ namespace ExpanderX
                     return;
                 }
             }
-            catch (Exception)
+            catch (Exception r)
             {
-                this.ShowMessageBox("任务模块异常：无法获取或提交任务模块实例。", "错误", MB.MB_ICONERROR);
+                this.ShowMessageBox(
+                    $"无法获取或提交任务模块实例。\n\n出错原因：{r.Message}\n",
+                    "任务模块异常",
+                    MB.MB_ICONERROR
+                );
                 return;
             }
             tm = Serialization.CpInstance(tm);
             if (tm == null)
+            {
+                this.ShowMessageBox("任务模块异常：复制任务模块实例时发生错误。", "错误", MB.MB_ICONERROR);
                 return;
+            }
+            this.Close();
             tm.CustomName = tm.Name + "：" + remark;
             tm.IsMatchEnable = this.uiCheckBox_AsMatcher.IsChecked ?? false;
             tm.IsExecuteEnable = this.uiCheckBox_AsExecutor.IsChecked ?? false;
             this.AddTaskModuleToMainUI.Invoke(tm);
-            this.Close();
         }
 
-        private void OnListBoxTaskModulesSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnListBoxTaskModulesSelectionChanged(
+            object sender,
+            SelectionChangedEventArgs e
+        )
         {
             int index = this.uiListBox_TaskModules.SelectedIndex;
             if (index == -1)
@@ -141,17 +154,17 @@ namespace ExpanderX
             this.uiCheckBox_AsExecutor.IsChecked = false;
             if (!(this.CustomControls[index] is IGetTaskModule igt))
             {
-                this.ShowMessageBox("任务模块错误：无法获取通用接口。", "错误", MB.MB_ICONERROR);
+                this.ShowMessageBox("无法获取通用接口。", "任务模块错误", MB.MB_ICONERROR);
                 return;
             }
             try
             {
                 if (!(igt.GetTaskModule() is AbsTaskModule tm))
                 {
-                    this.ShowMessageBox("获取任务模块实例结果为空。", "错误", MB.MB_ICONERROR);
+                    this.ShowMessageBox("无法获取任务模块实例。", "错误", MB.MB_ICONERROR);
                     return;
                 }
-                switch (tm.TaskType)
+                switch (tm.ModuleType)
                 {
                     case 0:
                         this.uiCheckBox_AsMatcher.IsEnabled = true;
@@ -176,9 +189,9 @@ namespace ExpanderX
                         break;
                 }
             }
-            catch
+            catch (Exception r)
             {
-                this.ShowMessageBox("获取任务模块出错。", "错误", MB.MB_ICONERROR);
+                this.ShowMessageBox($"获取任务模块出错。\n\n出错原因：{r.Message}\n", "错误", MB.MB_ICONERROR);
                 return;
             }
             this.uiGrid_TaskModuleInterface.Children.Add(this.CustomControls[index]);

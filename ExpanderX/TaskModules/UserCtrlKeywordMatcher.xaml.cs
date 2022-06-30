@@ -77,7 +77,7 @@ namespace ExpanderX
         public string[] SendersExc { get; set; }
         public string[] SendersInc { get; set; }
         public string ExcludeContent { get; set; }
-        public override int TaskType
+        public override int ModuleType
         {
             get { return 2; }
         }
@@ -192,7 +192,8 @@ namespace ExpanderX
             return flagSenderInc && flagKeywordInc;
         }
 
-        public override bool Init()
+        // 此处重写 Init 方法也可
+        public override bool Stop()
         {
             this.lastsender = null;
             this.lastcontent = null;

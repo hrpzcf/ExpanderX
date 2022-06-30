@@ -18,7 +18,7 @@ namespace ExpanderX
         private void SetupUI(AbsTaskModule w)
         {
             this.uiTextBox_TaskModuleName.Text = w.Name;
-            switch (w.TaskType)
+            switch (w.ModuleType)
             {
                 case 0:
                     this.uiImage_TaskModuleIcon.Style = (Style)RES.Res["ImgMatcher"];

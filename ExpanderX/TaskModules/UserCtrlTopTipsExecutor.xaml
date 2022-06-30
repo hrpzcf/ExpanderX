@@ -57,9 +57,8 @@
             Margin="5,0,0,0"
             Padding="0,5,0,5"
             VerticalAlignment="Center"
-            Background="#FFD2D2D2"
-            FontFamily="NSimSun"
-            Text="当同一规则内的所有匹配器都符合匹配条件，此执行器会创建一个提示窗口并显示你输入的内容或者显示接收到的钉钉消息。"
+            Background="#FFEBEBEB"
+            Text="当同一任务包内的所有匹配器都符合匹配条件，此执行器会创建一个提示窗口并显示你输入的内容或者显示接收到的钉钉消息。"
             TextWrapping="Wrap" />
     </Grid>
 </UserControl>
